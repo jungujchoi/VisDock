@@ -1,4 +1,4 @@
 # VisDock Tutorials
-## Import VisDock and related libraries
-## Initialize VisDock
-## Selection Handlers
+- Import VisDock and related libraries
+- Initialize VisDock
+- Selection Handlers
