@@ -53,3 +53,6 @@ Even though 2D.js and IntersectionLibrary.js already provide excellent functions
 - EllipseLineIntersecction: Check the intersection between an svg elliipse and an svg line.
 - LineLineIntersection: Check the intersection between an svg line and an svg line.
 
+VisDock Tutorials
+------------------------------------------------------------------------------------------------------
+https://github.com/jungujchoi/VisDock/blob/master/Tutorials.md
