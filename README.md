@@ -46,7 +46,14 @@ Even though 2D.js and IntersectionLibrary.js already provide excellent functions
     + inclusive: this parameter is either 0 or 1. 0 means not inclusive so that the path element has to be fully enclosed by the svg polygon element or vice versa.
     + T: This is the transformation matrix. 
     
-- PolygonPolygonIntersection: Check the intersection between an svg polygon and an svg polygon.
+- PolygonPolygonIntersection (points, shape, polygon, inclusive, T): Check the intersection between an svg polygon and an svg polygon.
+  * Input arguments: 
+    + points: An array of points of the polygon. Usually, this polygon is created using Lasso, Polygon, or Rectangle Tool.
+    + shape: 
+    + This is the shape of a polygon belonging to the original host visualization.
+    + inclusive: this parameter is either 0 or 1. 0 means not inclusive so that the path element has to be fully enclosed by the svg polygon element or vice versa.
+    + T: This is the transformation matrix. 
+    
 - EllipsePolygonIntersection: Check the intersection between an svg polygon and an svg ellipse.
 - LinePolygonIntersection: Check the intersection between an svg polygon and an svg line.
 - EllipseEllipseIntersection: Check the intersection between an svg ellipse and an svg ellipse.
