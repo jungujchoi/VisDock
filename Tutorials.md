@@ -366,3 +366,8 @@ VisDock.selectionHandler = {
             }
 }
 </code></pre>
+<br>
+- Screenshots of the final products: exploration and annotations
+<br>
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/tigerdone.png?raw=true" height = "500" width = "500">
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/circlepackdone.png?raw=true" height = "450" width = "500">
