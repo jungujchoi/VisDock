@@ -24,15 +24,46 @@ case, the code below makes the variable 'viewport' such svg. <br>
 This is not very difficult a task. When you are done with your visualization, you may skip the next few
 steps and go to 'Selection Handler.'
 But if you wish to adopt VisDock onto a pre-made visualization, it may take an extra work to do so.
-In this case, we will use a visualization created with Raphael.js found on this <a href="http://raphaeljs.com/tiger.html">link</a>.
+In this case, we will use a visualization created with Raphael.js found on this <a href="http://raphaeljs.com/tiger.html">link</a>
+and another visualization created with d3.js found on this <a href="http://bl.ocks.org/mbostock/4063530">link</a>.
 <br>
-<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/tigervis.png?raw=true" height = "450" width = "450">
+<br>
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/tigervis.png?raw=true" height = "400" width = "400">
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/circlepackbefore.png?raw=true" height = "400" width = "400">
 <br>
 <br>
-- Attach the visualization onto 'viewport': this step may become complex if you are not making the visualization
+- Attach the visualization onto 'viewport' (<a href="http://bl.ocks.org/mbostock/4063530">circle packet example</a>):
+this step may become complex if you are not making the visualization
 from scratch. But the underlying concept is that you need to extract all the svg objects from the pre-made
 visualization and push them onto 'viewport.' Some examples created with d3.js do not require this step
-since it may only take the users to change the pre-defined svg space to 'viewport.' But for an example 
+since it may only take the users to change the pre-defined svg space to 'viewport.'
+<pre>
+<code>
+d3.json("circle.json", function(error, root) {
+  node = viewport.datum(root).selectAll(".node") // This is the only change you need to make. 'svg' -> 'viewport'
+      .data(pack.nodes)
+      .enter().append("g")
+      .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+
+  node.append("title")
+      .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); })
+      
+  node.append("circle")
+      .attr("r", function(d) { return d.r; })
+      .attr("cx", function(d) { return parseInt(d.x)})
+      .attr("cy", function(d) { return parseInt(d.y)})
+      .attr("fill-opacity", ".25");
+
+  node.filter(function(d) { return !d.children; }).append("text")
+      .attr("dy", ".3em")
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.name.substring(0, d.r / 3); })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+});
+</code>
+</pre>
+<br>
+- Attach the visualization onto 'viewport' (<a href="http://raphaeljs.com/tiger.html">tiger example</a>): But for an example 
 created with Raphael.js this step will most certainly necessary.
 <pre>
 <code>
@@ -54,12 +85,14 @@ r.remove() // removing the original elements
 </code>
 </pre>
 <br>
-<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/tiger.png?raw=true" height = "450" width = "450">
-<br>
 - After initialization: at this stage, VisDock utilities are functional, which means users may draw shapes, pan and zoom in
           and out, and make annotations. But until Selection Handler is properly set, selection methods will not work 
-          correctly. In the figure below, Rectangle selection method is being used and a yellow rectangle is drawn by
-          the user.
+          correctly.
+<br><br>
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/tiger.png?raw=true" height = "400" width = "400">
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/bubblepacket.png?raw=true" height = "380" width = "400">
+<br>
+<br>
 - Selection Handler: Selection Handler is a function inherent in the VisDock library. This function is invoked when
           a selection is made by users. This handles not only the intersections of user-drawn selection shapes and the
           svg objects of the host visualization but also other events such as 'setColor','removeColor', and 'changeColor'
@@ -99,5 +132,7 @@ VisDock.selectionHandler = {
     // This event is called when the user wants to remove the colour of the selection layers.
             
     },
-}</code>
+}
+</code>
 </pre>  
+<br>
