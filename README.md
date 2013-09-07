@@ -98,6 +98,29 @@ In order to check the intersection between shapes, it may require to initialize 
     + points: an array of x and y coordinates of the second line or line segments. This argument may have a length greater than 2 if it is a polyline or a curve.
     + inclusive: this parameter is either 0 or 1. 0 means not inclusive so that the path element has to be fully enclosed by the svg polygon element or vice versa.
     + T: this is the transformation matrix. 
-  
+
+#### Other useful functions:
+
+  - getNumberOfCircles: this function returns the number of circles that belong in the original visualization.
+It is an important function because users may make selections and subsequently create svg circle objects. So
+the total number of svg circle objects will change.
+  - getNumberOfPaths: this function returns the number of path elements that belong in the original visualization.
+  - getPolygons: this function returns the svg polygons that belong in the original visualization.
+  - getEllipses: this function returns the svg ellipses that belong in the original visualization.
+  - getLines: this function returns the svg lines that belong in the original visualization.
+  - getQueryColor (index): returns the pre-defined color for a specific query. The index of the query is the
+input argument.
+  - getQueryVisibility (index): returns the visibility of the layers of a specific query. This value is
+between 0 and 1.
+  - CheckNodeConditions (obj, attr, str): this function is very important in that the users may not only 
+check the intersection but also impose a condition on which the object may be selected. For instance, take
+an example of <a href="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/bubblepacket.png?raw=true">
+Circle Packet</a>. This visualization consists of circles of different hierarchy. The users may wish to
+verify interection of the user-defined shapes and only the leaf nodes (orange circles), thus ignoring all
+other circles of higher hierarchy. This function will perform such condition check.
+   + 1st argument (obj): the svg object whose attributes the users may verify
+   + 2nd argument (attr): any attributes such as "class","id","color" and etc. 
+   + 3rd argument (str): a string that describes such attribute (2nd argument).
+   
 <a href="https://github.com/jungujchoi/VisDock/blob/master/Tutorials.md">Go to VisDock Tutorials</a>
 ------------------------------------------------------------------------------------------------------
