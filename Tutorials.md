@@ -65,49 +65,39 @@ r.remove() // removing the original elements
           svg objects of the host visualization but also other events such as 'setColor','removeColor', and 'changeColor'
           for the selected objects. We will provide the skeleton function here. 
 	<br>
-<pre>
-<code style="margin-left: 30px">VisDock.selectionHandler = {</code>
-    			<br>
-    			<code style="margin-left: 40px">getHitsPolygon: function(points, inclusive){</code>
-    			<br>
-    			<code style="margin-left: 40px">// This event is called when selections are made using Polygon, Lasso and Rectangular tools.</code>
-    			<code style="margin-left: 40px">return hits; </code>
-    			<br>
-     			<code style="margin-left: 30px">},</code>
-    			<br>
-    			<code style="margin-left: 40px">getHitsEllipse: function(points, inclusive){</code>
-    			<br>
-    			<code style="margin-left: 40px">// This event is called when selections are made using made using Ellipse Tool.</code>
-    			<br>
-    			<br>
-    			<code style="margin-left: 40px">return hits; </code>
-    			<br>
-     			<code style="margin-left: 30px">},</code>
-    			<br>
-     			<code style="margin-left: 40px">getHitsLine: function(points, inclusive){</code>
-    			<br>
-    			<code style="margin-left: 40px">// This event is called when selections are made using Polyline, Straightline, and Freeselection tools.</code>
-    			<br>
-    			<br>
-    			<code style="margin-left: 40px">return hits; </code>
-    			<br>
-     			<code style="margin-left: 30px">},</code>
-    			<br>
-    			<code style="margin-left: 40px">setColor: function(hits){</code>
-    			<br>
-    			<code style="margin-left: 40px">// This event is called when the user wants to change the colors of the selection layers.</code>
-    			<br>
-     			<code style="margin-left: 30px">},</code>
-    			<br>
-    			<code style="margin-left: 40px">changeVisibility: function(vis, query){</code>
-    			<br>
-    			<code style="margin-left: 40px">// This event is called when the user wants to change the visibility of the selection layers.</code>
-    			<br>
-     			<code style="margin-left: 30px">},</code>
-    			<br>    			    			
-     			<code style="margin-left: 40px">removeColor: function(hits, index){</code>
-    			<br>
-    			<code style="margin-left: 40px">// This event is called when the user wants to remove the colour of the selection layers.</code>
-    			<br>
-     			<code style="margin-left: 30px">},</code>
-    			<br></pre>  
+<pre><code>
+VisDock.selectionHandler = {
+    getHitsPolygon: function(points, inclusive){
+    // This event is called when selections are made using Polygon, Lasso and Rectangular tools.
+
+        return hits; 
+    },
+            
+    getHitsEllipse: function(points, inclusive){
+    // This event is called when selections are made using made using Ellipse Tool.
+            
+        return hits; 
+    },
+            
+    getHitsLine: function(points, inclusive){
+    // This event is called when selections are made using Polyline, Straightline, and Freeselection tools.
+            
+        return hits; 
+    },
+            
+    setColor: function(hits){
+    // This event is called when the user wants to change the colors of the selection layers.
+            
+    },
+            
+    changeVisibility: function(vis, query){
+    // This event is called when the user wants to change the visibility of the selection layers.
+            
+    },
+            
+    removeColor: function(hits, index){
+    // This event is called when the user wants to remove the colour of the selection layers.
+            
+    },
+}</code>
+</pre>  
