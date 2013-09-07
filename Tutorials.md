@@ -190,3 +190,179 @@ getHitsEllipse: function(points, inclusive, t){
             return hits;
         },
 </code></pre>
+<br>
+ + setColor: this function will be called when a query is made by either making new selections or performing
+binary operations between queries (common, union, or XOR).
+<br>
+<pre><code>
+setColor: function(hits, t){
+            var aa = getCircles();
+            for (var i=0;i&lt;hits.length;i++){
+                addPathLayer(aa[hits[i]],t); // t is the transformation matrix
+            }
+},
+</code></pre>
+<br>
+ + changeColor: this function will be called when the users wish to change the color of a query or queries.
+<br>
+<pre><code>
+changeColor: function(color, query){
+            for (var i=0;i&lt;query.length;i++){
+                query[i].attr("fill",color)
+            }
+},
+</code></pre>
+<br>
+ + changeVisibility: this function will be called when the users wish to change the visibility of
+Freeselection tools.
+<pre><code>
+changeVisibility: function(vis, query){
+            for (var i=0;i&lt;query.length;i++){
+                query[i].attr("opacity",vis);
+            }
+},
+</code></pre>
+<br>
+ + removeColor: this function will be called when the users wish to remove the layers for a query or queries.
+<pre><code>
+removeColor: function(hits, index){
+            for (var i=0;i&lt;hits.length;i++){
+                hits[i].remove();
+            }
+    },
+</code></pre>
+ + QueryClick: this function is completely optional. The users may add this function to handle events when
+a query box is clicked in the query list. For the tiger example, we'll leave this function out.
+</code></pre>
+<br>
+ + getHitsLine: this function will be called when the users make selections with StraightLine, Polyline, and
+Freeselection tools.
+<br>
+<pre><code>
+getHitsLine: function(points, inclusive){
+            var aa = getPaths();
+            var nElements = getNumberOfPaths(); 	
+            var hits = [];
+            var count = 0;
+            var captured = 0;
+            for (var i=0; i&lt;nElements; i++){
+                captured = 0;
+                captured = PathLineIntersection(points,aa[i]);
+                if (captured == 1){
+                    hits[count] = i;
+                    count++;
+                }
+            }
+            return hits;
+    },
+</pre></code>
+<br>
+- Circle Packet example: the circle packet example is written in a very similar manner except that the
+condition checking function is used. The lines are a little bit different. For instance:
+ + Node checking: getHits functions use 'getNodes' and 'CheckNodeConditions.' 
+<br>
+<pre><code>
+getHitsLine: function(points, inclusive){
+            var aa = getCircles();
+            var nElements = getNumberOfCircles();
+            var aa2 = getNodes(nElements); // while the variable 'aa' stores the svg circles, the variable
+						'aa2' stores the nodes that refer to the svg circles.
+						This variable will be used to check additional selection
+						conditions.
+            var hits = [];
+            var count = 0;
+            var captured = 0;
+            for (var i=0; i&lt;nElements; i++){
+                captured = 0;
+                captured = CircleLineIntersection(points,aa[i]);
+                if (captured == 1 && CheckNodeConditions(aa2[i],"class","leaf node")){
+		    // The node condition that only leaf node will be selected must be satisfied.
+                    hits[count] = i;
+                    count++;
+                }
+            }
+            return hits;
+},
+</code></pre>
+<br>
+ + Circle Packet example: we list here the entire code for selectionHandler in Circle Packet example.
+<br>
+<pre><code>
+VisDock.selectionHandler = {
+            getHitsPolygon: function(points, inclusive, t){
+                var aa = getCircles();
+                var nElements = getNumberOfCircles();	
+                var aa2 = getNodes(nElements);
+                var hits = [];
+                var count = 0;
+                var captured = 0;
+                var shapebound = PolygonInit(points,[0,0]);
+                for (var i=0; i&lt;nElements; i++){
+                    captured = 0;
+                    captured = CirclePolygonIntersection(points,shapebound,aa[i], inclusive,t);
+                    if (captured == 1 && CheckNodeConditions(aa2[i],"class","leaf node")){
+                        hits[count] = i;
+                        count++;
+                    }
+                }
+                return hits;
+            },
+            getHitsEllipse: function(points, inclusive, t){
+                var aa = getCircles();
+                var nElements = getNumberOfCircles();	
+                var aa2 = getNodes(nElements);
+                var hits = [];
+                var count = 0;
+                var captured = 0;
+                for (var i=0; i&lt;nElements; i++){
+                    captured = 0;
+                    captured = CircleEllipseIntersection(points,aa[i]);
+                    if (captured == 1 && CheckNodeConditions(aa2[i],"class","leaf node")){
+                        hits[count] = i;
+                        count++;
+                    }
+                }
+                return hits;
+            },
+            getHitsLine: function(points, inclusive){
+                var aa = getCircles();
+                var nElements = getNumberOfCircles();
+                var aa2 = getNodes(nElements);
+                var hits = [];
+                var count = 0;
+                var captured = 0;
+                for (var i=0; i&lt;nElements; i++){
+                    captured = 0;
+                    captured = CircleLineIntersection(points,aa[i]);
+                    if (captured == 1 && CheckNodeConditions(aa2[i],"class","leaf node")){
+                        hits[count] = i;
+                        count++;
+                    }
+                }
+                return hits;
+            },
+            setColor: function(hits){
+                var aa = getCircles();
+                for (var i=0;i&lt;hits.length;i++){
+                    addCircleLayer(aa[hits[i]]);
+                }
+            },
+            changeColor: function(color, query, index){
+                var visibility = getQueryVisibility(index);	
+                for (var i=0;i&lt;query.length;i++){
+                    query[i].attr("style","opacity:" + visibility + ";fill: " +color)
+                }
+            },
+            changeVisibility: function(vis, query, index){
+                var color = getQueryColor(index);
+                for (var i=0;i&lt;query.length;i++){
+                    query[i].attr("style","opacity:" + vis + ";fill: " +color)
+                }
+            },
+            removeColor: function(hits, index){
+                for (var i=0;i&lt;hits.length;i++){
+                    hits[i].remove();
+                }
+            }
+}
+</code></pre>
