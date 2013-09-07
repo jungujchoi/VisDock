@@ -40,25 +40,25 @@ since it may only take the users to change the pre-defined svg space to 'viewpor
 <pre>
 <code>
 d3.json("circle.json", function(error, root) {
-  node = viewport.datum(root).selectAll(".node") // This is the only change you need to make. 'svg' -> 'viewport'
-      .data(pack.nodes)
-      .enter().append("g")
-      .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+        node = viewport.datum(root).selectAll(".node") // This is the only change you need to make. 'svg' -> 'viewport'
+            .data(pack.nodes)
+            .enter().append("g")
+            .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
 
-  node.append("title")
-      .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); })
+        node.append("title")
+              .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); })
       
-  node.append("circle")
-      .attr("r", function(d) { return d.r; })
-      .attr("cx", function(d) { return parseInt(d.x)})
-      .attr("cy", function(d) { return parseInt(d.y)})
-      .attr("fill-opacity", ".25");
+        node.append("circle")
+            .attr("r", function(d) { return d.r; })
+            .attr("cx", function(d) { return parseInt(d.x)})
+            .attr("cy", function(d) { return parseInt(d.y)})
+            .attr("fill-opacity", ".25");
 
-  node.filter(function(d) { return !d.children; }).append("text")
-      .attr("dy", ".3em")
-      .style("text-anchor", "middle")
-      .text(function(d) { return d.name.substring(0, d.r / 3); })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        node.filter(function(d) { return !d.children; }).append("text")
+            .attr("dy", ".3em")
+            .style("text-anchor", "middle")
+            .text(function(d) { return d.name.substring(0, d.r / 3); })
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 });
 </code>
 </pre>
@@ -69,17 +69,17 @@ created with Raphael.js this step will most certainly necessary.
 <code>
 var r = Raphael(tiger).translate(200, 200); // here, the translation (200, 200) depends on the user's screen resolution
 for (var i=0;i&lt;r.length;i++){
-    var d = r[i][0].getAttributeNS(null,"d"); // 'd' attribute of svg path
-    var stroke = r[i][0].getAttributeNS(null,"stroke"); // 'stroke' attribute of svg path
-    var fill = r[i][0].getAttributeNS(null,"fill"); // 'fill' attribute of svg path
-    var swidth = r[i][0].getAttributeNS(null,"stroke-width"); // 'stroke-width' attribute of svg path
-    var tform = r[i][0].getAttributeNS(null,"transform"); // 'transform' attribute of svg path
-    viewport.append("path") // putting elements onto viewport
-        .attr("d",d)
-        .attr("stroke",stroke)
-        .attr("fill",fill)
-        .attr("stroke-width",swidth)
-        .attr("transform",tform)
+        var d = r[i][0].getAttributeNS(null,"d"); // 'd' attribute of svg path
+        var stroke = r[i][0].getAttributeNS(null,"stroke"); // 'stroke' attribute of svg path
+        var fill = r[i][0].getAttributeNS(null,"fill"); // 'fill' attribute of svg path
+        var swidth = r[i][0].getAttributeNS(null,"stroke-width"); // 'stroke-width' attribute of svg path
+        var tform = r[i][0].getAttributeNS(null,"transform"); // 'transform' attribute of svg path
+        viewport.append("path") // putting elements onto viewport
+            .attr("d",d)
+            .attr("stroke",stroke)
+            .attr("fill",fill)
+            .attr("stroke-width",swidth)
+            .attr("transform",tform)
 }
 r.remove() // removing the original elements
 </code>
@@ -100,39 +100,93 @@ r.remove() // removing the original elements
 	<br>
 <pre><code>
 VisDock.selectionHandler = {
-    getHitsPolygon: function(points, inclusive){
-    // This event is called when selections are made using Polygon, Lasso and Rectangular tools.
+        getHitsPolygon: function(points, inclusive){
+        // This event is called when selections are made using Polygon, Lasso and Rectangular tools.
 
-        return hits; 
-    },
+            return hits; 
+        },
             
-    getHitsEllipse: function(points, inclusive){
-    // This event is called when selections are made using made using Ellipse Tool.
+        getHitsEllipse: function(points, inclusive){
+        // This event is called when selections are made using made using Ellipse Tool.
             
-        return hits; 
-    },
+            return hits; 
+        },
             
-    getHitsLine: function(points, inclusive){
-    // This event is called when selections are made using Polyline, Straightline, and Freeselection tools.
+        getHitsLine: function(points, inclusive){
+        // This event is called when selections are made using Polyline, Straightline, and Freeselection tools.
             
-        return hits; 
-    },
+            return hits; 
+        },
             
-    setColor: function(hits){
-    // This event is called when the user wants to change the colors of the selection layers.
+        setColor: function(hits){
+        // This event is called when the user wants to change the colors of the selection layers.
             
-    },
+        },
             
-    changeVisibility: function(vis, query){
-    // This event is called when the user wants to change the visibility of the selection layers.
+        changeVisibility: function(vis, query){
+        // This event is called when the user wants to change the visibility of the selection layers.
             
-    },
+        },
             
-    removeColor: function(hits, index){
-    // This event is called when the user wants to remove the colour of the selection layers.
+        removeColor: function(hits, index){
+        // This event is called when the user wants to remove the colour of the selection layers.
             
-    },
+        },
 }
 </code>
 </pre>  
 <br>
+- Cross-cutting seletions (tiger example): UtilitiesLibrary.js provides various functions that users
+can utilize. Tiger visualization consists of only svg path elements. Therefore, only comparison between
+path elements and shapes needs to be made. We will provide an example.
+ + getHitsPolygon: this event will be called when the users make selections with Lasso, Polygon and
+Rectangle tools.
+<br>
+<pre><code>
+getHitsPolygon: function(points, inclusive, t){
+            var aa = getPaths(); // look up all the path elements and store them in the variable 'aa'
+            var nElements = getNumberOfPaths(); 
+            var hits = []; // this stores information about objects or objects themselves that 
+                            intersect the user-drawn polygon.
+            var count = 0;
+            var captured = 0;
+            t = [200,200]; // this transformation has scale and translation.
+            var shapebound = PolygonInit(points,t); // shapebound is a new polygon object 
+                                                        which has the shape created by using
+                                                        selection tools.
+            for (var i=0; i&lt;nElements; i++){
+                captured = 0;
+                captured = PathPolygonIntersection(points,shapebound,aa[i],inclusive,t); 
+                // captured will have 0 if the path element 'aa[i]' and shapebound do not intersect
+                // Otherwise, it will haev 1
+                if (captured == 1){
+                    hits[count] = i; // we are storing the index of the path object. But the users may
+                                        choose to store other information or the object itself.
+                    count++;
+                }
+            }
+            return hits;
+        }
+</code></pre>
+<br>
+ + getHitsEllipse: similarly, this event will be called when the users make selections with Ellipse tool.
+<br>
+<pre><code>
+getHitsEllipse: function(points, inclusive, t){
+            var aa = getPaths();
+            var nElements = getNumberOfPaths();	
+            var hits = [];
+            var count = 0;
+            var captured = 0;
+            var ellipse = EllipseInit(points, t);
+            for (var i=0; i%lt;nElements; i++){
+                captured = 0;
+                captured = PathEllipseIntersection(ellipse,aa[i],inclusive,t);
+                if (captured == 1){
+                    hits[count] = i;
+                    count++;
+                }
+            }
+            return hits;
+        },
+</code></pre>
