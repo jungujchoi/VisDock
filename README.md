@@ -48,15 +48,36 @@ Even though 2D.js and IntersectionLibrary.js already provide excellent functions
     
 - PolygonPolygonIntersection (points, shape, polygon, inclusive, T): Check the intersection between an svg polygon and an svg polygon.
   * Input arguments: 
-    + points: An array of points of the polygon. Usually, this polygon is created using Lasso, Polygon, or Rectangle Tool.
-    + shape: 
-    + This is the shape of a polygon belonging to the original host visualization.
+    + points: An array of points of the shape (second argument), which is a polygon. Usually, this polygon is created using Lasso, Polygon, or Rectangle Tool.
+    + shape: this shape is an svg polygon object whose points are the same as in the first argument (points).
+    + polygon: This is the shape of a polygon belonging to the original host visualization.
     + inclusive: this parameter is either 0 or 1. 0 means not inclusive so that the path element has to be fully enclosed by the svg polygon element or vice versa.
     + T: This is the transformation matrix. 
     
-- EllipsePolygonIntersection: Check the intersection between an svg polygon and an svg ellipse.
-- LinePolygonIntersection: Check the intersection between an svg polygon and an svg line.
-- EllipseEllipseIntersection: Check the intersection between an svg ellipse and an svg ellipse.
+- EllipsePolygonIntersection (points, shape, points2, inclusive, T): Check the intersection between an svg polygon and an svg ellipse.
+  * Input arguments: 
+    + points: An array of points describing the ellipse, include the coordinates of the center of the ellipse, transverse diameters in the x and y directions. This parameter is passed in the form of [cx, cy, ra, rb]. 
+    + shape: this shape is an svg polygon object whose points are the same as in the third argument (points2).
+    + points2: An array of x and y coordinates of the polygon in the form of [[x1, y1], [x2, y2], [x3, y3], ... , [xn, yn]]. This array describes the polygon (shape), which is usually created by using Lasso, Polygon, or Rectangle Tool.
+    + inclusive: this parameter is either 0 or 1. 0 means not inclusive so that the path element has to be fully enclosed by the svg polygon element or vice versa.
+    + T: This is the transformation matrix. 
+
+- LinePolygonIntersection (points1, points2, shape, inclusive, T): Check the intersection between an svg polygon and an svg line.
+  * Input arguments: 
+    + points: An array of points of the polygon (shape in the third argument). 
+    + points2: An array of x and y coordinates of the line/line segments. If the user wants to check the intersection between line segments (curves or polylines) and a polygon, this arguments may have a length greater than 2. 
+    + shape: this shape is an svg polygon object whose points are the same as in the first argument (points). This argument needs to be initialized using PolygonInit before being passed.
+    + inclusive: this parameter is either 0 or 1. 0 means not inclusive so that the path element has to be fully enclosed by the svg polygon element or vice versa.
+    + T: This is the transformation matrix. 
+
+- EllipseEllipseIntersection (points1, points2, inclusive, T): Check the intersection between an svg ellipse and an svg ellipse.
+  * Input arguments: 
+    + points: An array describing the first ellipse that include the coordinates of the center of the ellipse, transverse diameters in the x and y directions. This parameter is passed in the form of [cx, cy, ra, rb]/
+    + points2: An array of x and y coordinates of the line/line segments. If the user wants to check the intersection between line segments (curves or polylines) and a polygon, this arguments may have a length greater than 2. 
+    + shape: this shape is an svg polygon object whose points are the same as in the first argument (points). This argument needs to be initialized using PolygonInit before being passed.
+    + inclusive: this parameter is either 0 or 1. 0 means not inclusive so that the path element has to be fully enclosed by the svg polygon element or vice versa.
+    + T: This is the transformation matrix. 
+    
 - EllipseLineIntersecction: Check the intersection between an svg elliipse and an svg line.
 - LineLineIntersection: Check the intersection between an svg line and an svg line.
 
