@@ -150,7 +150,7 @@ visPolygon.prototype.lineIntersection = function(line, inclusive, t) {
 				return 1;
 			}
 		}
-	} else (line.tagName == "line") {
+	} else if (line.tagName == "line") {
 		var x1 = line.getAttributeNS(null,"x1");
 		var y1 = line.getAttributeNS(null,"y1");
 		var x2 = line.getAttributeNS(null,"x2");
@@ -168,7 +168,7 @@ visPolygon.prototype.lineIntersection = function(line, inclusive, t) {
 			return 1;
 		}
 	}
-};
+}
 
 function visEllipse(points){
 	var ellipse = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
