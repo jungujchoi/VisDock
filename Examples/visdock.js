@@ -3436,6 +3436,7 @@ var VisDock = {
     init_text: 0,
     query: [],
     birdtemp: [],
+  
     // Selection handler - provided by host visualization:
     //
     // getHits(polygon, inclusive : boolean) - returns a list of
@@ -3492,6 +3493,86 @@ var VisDock = {
 
     getViewport: function() {
 		return Panel.hostvis;
-    }
+    },
+    utils: {
+    	getQueryColor: function(index){
+    		alert(QueryManager.colors[index])
+    		return QueryManager.colors[index];
+    	},
+     	getQueryVisibility: function(index){
+     		alert(QueryManager.visibility[index])
+     		return QueryManager.visibility[index];
+     	},
+    	addPathLayer: function(path){
+ 			if (QueryManager.layers[num-1] == undefined){
+				QueryManager.layers[num-1] = [];
+				QueryManager.colors[num-1] = [];
+				QueryManager.visibility[num-1] = [];
+			}
+			var d = path.getAttributeNS(null,"d");
+			var P = viewport.append("path")
+					.attr("d",d)
+					.attr("fill", VisDock.color[num-1])
+					.attr("opacity", VisDock.opacity)
+					.attr("stroke-width",1)
+  			//.attr("transform","translate("+t[0]+","+t[1]+")")
+
+			QueryManager.layers[num-1].push(P);
+			if (QueryManager.colors[num-1].length == 0){
+				QueryManager.colors[num-1] = VisDock.color[num-1];
+				QueryManager.visibility[num-1] = VisDock.opacity;
+			}   		
+    	},
+    	addEllipseLayer: function(ellipse){
+			if (QueryManager.layers[num-1] == undefined){
+				QueryManager.layers[num-1] = [];
+				QueryManager.colors[num-1] = [];
+				QueryManager.visibility[num-1] = [];
+			}
+
+			var cx = parseFloat(ellipse.getAttributeNS(null,"cx"));
+			var cy = parseFloat(ellipse.getAttributeNS(null,"cy"));
+			if (ellipse.tagName == "ellipse"){
+				var rx = parseFloat(ellipse.getAttributeNS(null,"rx"));
+				var ry = parseFloat(ellipse.getAttributeNS(null,"ry"));		
+			} else {
+				var rx = parseFloat(ellipse.getAttributeNS(null,"r"));
+				var ry = rx;	
+			}
+
+			var C = viewport.append("ellipse")
+				.attr("cx", cx)
+				.attr("cy", cy)
+				.attr("rx", rx)
+				.attr("ry", ry)
+				.attr("display", "inline")
+				.attr("style", "opacity:" + VisDock.opacity + "; fill:" + VisDock.color[num-1]);
+
+			QueryManager.layers[num-1].push(C);
+			if (QueryManager.colors[num-1].length == 0){
+				QueryManager.colors[num-1] = VisDock.color[num-1];
+				QueryManager.visibility[num-1] = VisDock.opacity;
+			}	    		
+    	},
+    	addPolygonLayer: function(polygon){
+ 			if (QueryManager.layers[num-1] == undefined){
+				QueryManager.layers[num-1] = [];
+				QueryManager.colors[num-1] = [];
+				QueryManager.visibility[num-1] = [];
+			}
+
+			var points = polygon.getAttributeNS(null,"polygon");
+
+			var C = viewport.append("polygon")
+				.attr("points", points)
+				.attr("style", "opacity:" + VisDock.opacity + "; fill:" + VisDock.color[num-1]);
+
+			QueryManager.layers[num-1].push(C);
+			if (QueryManager.colors[num-1].length == 0){
+				QueryManager.colors[num-1] = VisDock.color[num-1];
+				QueryManager.visibility[num-1] = VisDock.opacity;
+			}	   		
+    	}
+    }     
     
 };

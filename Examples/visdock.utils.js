@@ -1,4 +1,4 @@
-function visPolygon(points){
+function createPolygon(points){
 	var shapebound = document.createElementNS("http://www.w3.org/2000/svg","polygon");
 	var strpoints=[];
 
@@ -24,7 +24,7 @@ function visPolygon(points){
 	this.shapebound2D = new Polygon(shapebound);
 	this.vector_points = vector_points;
 }
-visPolygon.prototype.pathIntersection = function(path, inclusive, t) {
+createPolygon.prototype.pathIntersection = function(path, inclusive, t) {
 	var P=new Path(path);
 	var s=path.getAttributeNS(null,"d")
 	var rel = ["M","L","H","V","C","S","Q","T","A","Z"," ",","];
@@ -77,8 +77,7 @@ visPolygon.prototype.pathIntersection = function(path, inclusive, t) {
 		}
 	}			
 };
-visPolygon.prototype.polygonIntersection = function(polygon, inclusive, t) {
-
+createPolygon.prototype.polygonIntersection = function(polygon, inclusive, t) {
 	var bound=new Polygon(polygon);
 	var vector_points2 = [];
 
@@ -106,7 +105,7 @@ visPolygon.prototype.polygonIntersection = function(polygon, inclusive, t) {
 		return 1;
 	}
 };
-visPolygon.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
+createPolygon.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
 	var cx=ellipse.getAttributeNS(null,"cx");
 	var cy=ellipse.getAttributeNS(null,"cy");
 	var c = new Point2D(cx,cy);
@@ -128,9 +127,9 @@ visPolygon.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
 	if (result.status == "Intersection") {
 		return 1;
 	}		
+	return 0;
 };
-visPolygon.prototype.lineIntersection = function(line, inclusive, t) {
-	
+createPolygon.prototype.lineIntersection = function(line, inclusive, t) {
 	if (line.tagName == "polyline"){
 		var points = line.getAttributeNS(null,"points").split(" ")		
 		for (var j=0;j<points.length-1;j++){
@@ -168,9 +167,9 @@ visPolygon.prototype.lineIntersection = function(line, inclusive, t) {
 			return 1;
 		}
 	}
-}
+};
 
-function visEllipse(points){
+function createEllipse(points){
 	var ellipse = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
 	var ecx=points[0];
 	var ecy=points[1];
@@ -186,7 +185,7 @@ function visEllipse(points){
 	this.points = points;
 	this.ellipse2D = new Ellipse(points)
 }
-visEllipse.prototype.pathIntersection = function(path, inclusive, t) {
+createEllipse.prototype.pathIntersection = function(path, inclusive, t) {
 	var P = new Path(path);
 	var s=path.getAttributeNS(null,"d")
 
@@ -235,7 +234,7 @@ visEllipse.prototype.pathIntersection = function(path, inclusive, t) {
 		return 1;
 	}
 };
-visEllipse.prototype.polygonIntersection = function(polygon, inclusive, t) {
+createEllipse.prototype.polygonIntersection = function(polygon, inclusive, t) {
 	var vector_points = [];
 	var points = polygon.getAttributeNS(null,"points").split(" ")
 	for (var j=0;j<points.length;j++){
@@ -266,11 +265,11 @@ visEllipse.prototype.polygonIntersection = function(polygon, inclusive, t) {
 	}	
 };
 
-visEllipse.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
+createEllipse.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
 	var ecx=ellipse.getAttributeNS(null,"cx");
 	var ecy=ellipse.getAttributeNS(null,"cy");
 	if (ellipse.tagName == "circle"){
-		var rx=ellipse.getAttributeNS(null,"rx");
+		var rx=ellipse.getAttributeNS(null,"r");
 		var ry=rx;
 	} else if (ellipse.tagName == "ellipse"){
 		var rx=ellipse.getAttributeNS(null,"rx");
@@ -293,7 +292,7 @@ visEllipse.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
 	}
 };
 
-visEllipse.prototype.lineIntersection = function(line, inclusive, t) {
+createEllipse.prototype.lineIntersection = function(line, inclusive, t) {
 	var c = new Point2D(this.points[0], this.points[1]);
 	if (points.length > 2){
 		for (var j=0;j<points.length-1;j++){
@@ -314,7 +313,7 @@ visEllipse.prototype.lineIntersection = function(line, inclusive, t) {
 	}
 };
 
-function visLine(points){
+function createLine(points){
 	if (points.length == 2){
 		var line = document.createElementNS("http://www.w3.org/2000/svg","line");
 		var x1=points[0][0];
@@ -343,7 +342,7 @@ function visLine(points){
 	this.line = line;
 	this.points = points;
 }
-visLine.prototype.pathIntersection = function(path, inclusive, t) {
+createLine.prototype.pathIntersection = function(path, inclusive, t) {
 	var P = new Path(path)
 	if (this.points.length > 2){
 		for (var j=0;j<points.length-1;j++){
@@ -373,7 +372,7 @@ visLine.prototype.pathIntersection = function(path, inclusive, t) {
 	}		
 };
 
-visLine.prototype.polygonIntersection = function(polygon, inclusive, t) {
+createLine.prototype.polygonIntersection = function(polygon, inclusive, t) {
 	var shapebound = new Polygon(polygon)
 	var p1, p2;
 
@@ -401,14 +400,14 @@ visLine.prototype.polygonIntersection = function(polygon, inclusive, t) {
 	}	
 };
 
-visLine.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
+createLine.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
 	var cx=circle.getAttributeNS(null,"cx");
 	var cy=circle.getAttributeNS(null,"cy");
 	var c = new Point2D(cx,cy)	
 	if (ellipse.tagName == "circle"){ // Circle
 		var rx=circle.getAttributeNS(null,"r");		
 		var ry=rx;	
-	} else if (ellipse.tagName == "ellipse") { // Circle
+	} else if (ellipse.tagName == "ellipse") { // Ellipse
 		var rx=circle.getAttributeNS(null,"rx");		
 		var ry=circle.getAttributeNS(null,"ry");			
 	}
@@ -432,14 +431,14 @@ visLine.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
 	}
 };
 
-visLine.prototype.lineIntersection = function(line, inclusive, t) {
+createLine.prototype.lineIntersection = function(line, inclusive, t) {
 	if (line.tagName == "polyline"){
 		var vector_points = [];
 
 		var points = line.getAttributeNS(null,"points").split(" ")
 		for (var j=0;j<points.length-1;j++){
 			var pxy = points[j].split(",");
-			var pxy2 = points[j+1].split(",";)
+			var pxy2 = points[j+1].split(",")
 			var px = parseInt(pxy[0]);
 			var px2 = parseInt(pxy2[0]);
 			var py = parseInt(pxy[1]);
@@ -459,7 +458,7 @@ visLine.prototype.lineIntersection = function(line, inclusive, t) {
 		}		
 	} else if (line.tagName == "line"){
 		var pxy = points[0].split(",");
-		var pxy2 = points[1].split(",";)
+		var pxy2 = points[1].split(",")
 		var px = parseInt(pxy[0]);
 		var px2 = parseInt(pxy2[0]);
 		var py = parseInt(pxy[1]);
@@ -478,3 +477,85 @@ visLine.prototype.lineIntersection = function(line, inclusive, t) {
 		}		
 	}
 };
+/*
+VisDock.utils.addPolygonLayer = function(polygon){
+	if (QueryManager.layers[num-1] == undefined){
+		QueryManager.layers[num-1] = [];
+		QueryManager.colors[num-1] = [];
+		QueryManager.visibility[num-1] = [];
+	}
+
+	var points = polygon.getAttributeNS(null,"polygon");
+
+	var C = viewport.append("polygon")
+		.attr("points", points)
+		.attr("style", "opacity:" + VisDock.opacity + "; fill:" + VisDock.color[num-1]);
+
+	QueryManager.layers[num-1].push(C);
+	if (QueryManager.colors[num-1].length == 0){
+		QueryManager.colors[num-1] = VisDock.color[num-1];
+		QueryManager.visibility[num-1] = VisDock.opacity;
+	}	
+}
+
+VisDock.utils.addEllipseLayer = function(ellipse){
+	if (QueryManager.layers[num-1] == undefined){
+		QueryManager.layers[num-1] = [];
+		QueryManager.colors[num-1] = [];
+		QueryManager.visibility[num-1] = [];
+	}
+
+	var cx = parseFloat(ellipse.getAttributeNS(null,"cx"));
+	var cy = parseFloat(ellipse.getAttributeNS(null,"cy"));
+	if (ellipse.tagName == "ellipse"){
+		var rx = parseFloat(ellipse.getAttributeNS(null,"rx"));
+		var ry = parseFloat(ellipse.getAttributeNS(null,"ry"));		
+	} else {
+		var rx = parseFloat(ellipse.getAttributeNS(null,"r"));
+		var ry = ry;	
+	}
+
+	var C = viewport.append("circle")
+		.attr("cx", cx)
+		.attr("cy", cy)
+		.attr("rx", rx)
+		.attr("ry", ry)
+		.attr("style", "opacity:" + VisDock.opacity + "; fill:" + VisDock.color[num-1]);
+
+	QueryManager.layers[num-1].push(C);
+	if (QueryManager.colors[num-1].length == 0){
+		QueryManager.colors[num-1] = VisDock.color[num-1];
+		QueryManager.visibility[num-1] = VisDock.opacity;
+	}	
+}
+
+VisDock.utils.addPathLayer = function(path){
+	if (QueryManager.layers[num-1] == undefined){
+		QueryManager.layers[num-1] = [];
+		QueryManager.colors[num-1] = [];
+		QueryManager.visibility[num-1] = [];
+	}
+	var d = path.getAttributeNS(null,"d");
+	var P = viewport.append("path")
+			.attr("d",d)
+			.attr("fill", VisDock.color[num-1])
+			.attr("opacity", VisDock.opacity)
+			.attr("stroke-width",1)
+  			//.attr("transform","translate("+t[0]+","+t[1]+")")
+
+	QueryManager.layers[num-1].push(P);
+	if (QueryManager.colors[num-1].length == 0){
+		QueryManager.colors[num-1] = VisDock.color[num-1];
+		QueryManager.visibility[num-1] = VisDock.opacity;
+	}
+}
+
+VisDock.utils.getQueryVisibility = function(index){
+	return QueryManager.visibility[index];
+}
+
+VisDock.utils.getQueryColor = function(index){
+	return QueryManager.colors[index];
+}
+*/
+
