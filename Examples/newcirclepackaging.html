@@ -50,7 +50,7 @@ VisDock.selectionHandler = {
 	var shapebound = new createPolygon(points);
 	for (var i=0; i<nElements; i++){
  	    captured = 0;
- 	    captured = shapebound.ellipseIntersection(CircleElements[i].childNodes[1], true, 0)
+ 	    captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], true, 0)
 	    if (captured == 1){ 
 			hits[count] = i;
 			count++;
@@ -70,7 +70,7 @@ VisDock.selectionHandler = {
 		var shapebound = new createEllipse(points);;
 		for (var i=0; i<nElements; i++){
  	    	captured = 0;
- 	    	captured = shapebound.ellipseIntersection(CircleElements[i].childNodes[1], true, 0)
+ 	    	captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], true, 0)
 		
 	    	if (captured == 1){
 				hits[count] = i;
@@ -89,7 +89,7 @@ VisDock.selectionHandler = {
 
 		for (var i=0; i<nElements; i++){
  		    captured = 0;
- 	        captured = shapebound.ellipseIntersection(CircleElements[i].childNodes[1], true, 0)
+ 	        captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], true, 0)
 		    if (captured == 1){
 		    	hits[count] = i;
 				count++;

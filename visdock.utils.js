@@ -24,7 +24,7 @@ function createPolygon(points){
 	this.shapebound2D = new Polygon(shapebound);
 	this.vector_points = vector_points;
 }
-createPolygon.prototype.pathIntersection = function(path, inclusive, t) {
+createPolygon.prototype.intersectPath = function(path, inclusive, t) {
 	var P=new Path(path);
 	var s=path.getAttributeNS(null,"d")
 	var rel = ["M","L","H","V","C","S","Q","T","A","Z"," ",","];
@@ -77,7 +77,7 @@ createPolygon.prototype.pathIntersection = function(path, inclusive, t) {
 		}
 	}			
 };
-createPolygon.prototype.polygonIntersection = function(polygon, inclusive, t) {
+createPolygon.prototype.intersectPolygon = function(polygon, inclusive, t) {
 	var bound=new Polygon(polygon);
 	var vector_points2 = [];
 
@@ -105,7 +105,7 @@ createPolygon.prototype.polygonIntersection = function(polygon, inclusive, t) {
 		return 1;
 	}
 };
-createPolygon.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
+createPolygon.prototype.intersectEllipse = function(ellipse, inclusive, t) {
 	var cx=ellipse.getAttributeNS(null,"cx");
 	var cy=ellipse.getAttributeNS(null,"cy");
 	var c = new Point2D(cx,cy);
@@ -129,7 +129,7 @@ createPolygon.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
 	}		
 	return 0;
 };
-createPolygon.prototype.lineIntersection = function(line, inclusive, t) {
+createPolygon.prototype.intersectLine = function(line, inclusive, t) {
 	if (line.tagName == "polyline"){
 		var points = line.getAttributeNS(null,"points").split(" ")		
 		for (var j=0;j<points.length-1;j++){
@@ -185,7 +185,7 @@ function createEllipse(points){
 	this.points = points;
 	this.ellipse2D = new Ellipse(points)
 }
-createEllipse.prototype.pathIntersection = function(path, inclusive, t) {
+createEllipse.prototype.intersectPath = function(path, inclusive, t) {
 	var P = new Path(path);
 	var s=path.getAttributeNS(null,"d")
 
@@ -234,7 +234,7 @@ createEllipse.prototype.pathIntersection = function(path, inclusive, t) {
 		return 1;
 	}
 };
-createEllipse.prototype.polygonIntersection = function(polygon, inclusive, t) {
+createEllipse.prototype.intersectPolygon = function(polygon, inclusive, t) {
 	var vector_points = [];
 	var points = polygon.getAttributeNS(null,"points").split(" ")
 	for (var j=0;j<points.length;j++){
@@ -265,7 +265,7 @@ createEllipse.prototype.polygonIntersection = function(polygon, inclusive, t) {
 	}	
 };
 
-createEllipse.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
+createEllipse.prototype.intersectEllipse = function(ellipse, inclusive, t) {
 	var ecx=ellipse.getAttributeNS(null,"cx");
 	var ecy=ellipse.getAttributeNS(null,"cy");
 	if (ellipse.tagName == "circle"){
@@ -292,7 +292,7 @@ createEllipse.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
 	}
 };
 
-createEllipse.prototype.lineIntersection = function(line, inclusive, t) {
+createEllipse.prototype.intersectLine = function(line, inclusive, t) {
 	var c = new Point2D(this.points[0], this.points[1]);
 	if (points.length > 2){
 		for (var j=0;j<points.length-1;j++){
@@ -342,7 +342,7 @@ function createLine(points){
 	this.line = line;
 	this.points = points;
 }
-createLine.prototype.pathIntersection = function(path, inclusive, t) {
+createLine.prototype.intersectPath = function(path, inclusive, t) {
 	var P = new Path(path)
 	if (this.points.length > 2){
 		for (var j=0;j<points.length-1;j++){
@@ -372,7 +372,7 @@ createLine.prototype.pathIntersection = function(path, inclusive, t) {
 	}		
 };
 
-createLine.prototype.polygonIntersection = function(polygon, inclusive, t) {
+createLine.prototype.intersectPolygon = function(polygon, inclusive, t) {
 	var shapebound = new Polygon(polygon)
 	var p1, p2;
 
@@ -400,7 +400,7 @@ createLine.prototype.polygonIntersection = function(polygon, inclusive, t) {
 	}	
 };
 
-createLine.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
+createLine.prototype.intersectEllipse = function(ellipse, inclusive, t) {
 	var cx=circle.getAttributeNS(null,"cx");
 	var cy=circle.getAttributeNS(null,"cy");
 	var c = new Point2D(cx,cy)	
@@ -431,7 +431,7 @@ createLine.prototype.ellipseIntersection = function(ellipse, inclusive, t) {
 	}
 };
 
-createLine.prototype.lineIntersection = function(line, inclusive, t) {
+createLine.prototype.intersectLine = function(line, inclusive, t) {
 	if (line.tagName == "polyline"){
 		var vector_points = [];
 
