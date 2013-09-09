@@ -26,18 +26,23 @@ boundaries of SVG objects. These files were obtained from Kevin Lindsey Software
 - Ellipse and Line
 - Line and Line
 
-### UtilitiesLibrary.js
+### visdock.utils.js
 2D.js and IntersectionLibrary.js provide functions to determine the intersection of any two SVG objects. For
 VisDock.js users, the type of intersection is limited to between user-drawn shapes (polygons, ellipses, and
-lines) and SVG objects in the host visualization. UtilitiesLibrary.js summarizes these intersections in a
+lines) and SVG objects in the host visualization. visdock.utils.js summarizes these intersections in a
 more compact form.
 
 #### Functions for Initializations
+Once the users have drawn a shape using Polygon, Lasso, or Rectangle tool, the array of 
+the x and y coordinates of the verticies will be passed to the VisDock event handler. This array cannot 
+be used directly for the verification of intersection because the 2D.js and IntersectionUtilities.js libraries require
+specific object formats. The following functions initialize path, polygon, ellipse, and line elements 
+from the 
 In order to check the intersection between shapes, it may require to initialize the shapes as
 an SVG shape class before passing them as argument. Here are the functions that initialize such shapes.
 But note that not all shapes need to be initialized. We will explain further when an object needs to be
 initialized.
-  - PolygonInit (points, T): initializes an SVG polygon.
+  - createPolygon (points): initializes an SVG polygon.
     + points: when the users use Lasso, Polygon, and Rectangle tools, VisDock stores an array of points
 for the lasso, polygon, and rectangle in the array form [[x1, y1], [x2, y2], [x3, y3], ... , [xn, yn]].
 This function returns an SVG shape object.
