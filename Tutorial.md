@@ -187,7 +187,7 @@ getHitsEllipse: function(points, inclusive){
 
             // shapebound is a new ellipse object for the ellipse created by using Ellipse tool.
             var shapebound = new createEllipse(points); 
-            for (var i = 0; i %lt; nElements; i++) {
+            for (var i = 0; i &lt; nElements; i++) {
                 captured = 0;
                 captured = shapebound.intersectPath(pathObjects[i], inclusive);
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
@@ -218,7 +218,7 @@ getHitsLine: function(points, inclusive) {
             // shapebound is a new line object for the line created by using StraightLine, Polyline, and
                    Freeselection tools.
             var shapebound = new createLine(points); 
-            for (var i = 0; i %lt; nElements; i++) {
+            for (var i = 0; i &lt; nElements; i++) {
                 captured = 0;
                 captured = shapebound.intersectPath(pathObjects[i], inclusive);
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
@@ -233,7 +233,7 @@ getHitsLine: function(points, inclusive) {
             }
             return hits;
     },
-</pre></code>
+</code></pre>
 <br>
 
  + setColor: this function will be called when a query is made by either making new selections or performing
