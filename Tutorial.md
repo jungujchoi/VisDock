@@ -159,7 +159,6 @@ getHitsPolygon: function(points, inclusive) {
             // shapebound is a new polygon object for the polygon created by using selection tools.
             var shapebound = new createPolygon(points); 
             for (var i = 0; i &lt; nElements; i++) {
-                captured = 0;
                 captured = shapebound.intersectPath(pathObjects[i], inclusive); 
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
                          intersect
@@ -188,7 +187,6 @@ getHitsEllipse: function(points, inclusive){
             // shapebound is a new ellipse object for the ellipse created by using Ellipse tool.
             var shapebound = new createEllipse(points); 
             for (var i = 0; i &lt; nElements; i++) {
-                captured = 0;
                 captured = shapebound.intersectPath(pathObjects[i], inclusive);
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
                          intersect
@@ -219,7 +217,6 @@ getHitsLine: function(points, inclusive) {
                    Freeselection tools.
             var shapebound = new createLine(points); 
             for (var i = 0; i &lt; nElements; i++) {
-                captured = 0;
                 captured = shapebound.intersectPath(pathObjects[i], inclusive);
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
                          intersect
@@ -281,8 +278,9 @@ a query box is clicked in the query list. For the time being, we'll leave this f
 </code></pre>
 <br>
 
-- Circle Packet example: the circle packet example is written in a very similar. We list here the entire
-code for selectionHandler in the circle packet example.
+### Circle Packet example:
+The circle packet example is written in a very similar. We list here the entire code for
+VisDock.selectionHandler in the circle packet example.
 <br>
 <pre><code>
 VisDock.selectionHandler = {
@@ -294,7 +292,6 @@ VisDock.selectionHandler = {
                 var captured = 0;
                 var shapebound = new createPolygon(points);
                 for (var i = 0; i &lt; nElements; i++){
-                    captured = 0;
                     captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], inclusive)
                     if (captured == 1){ 
                         hits[count] = i;
@@ -311,7 +308,6 @@ VisDock.selectionHandler = {
                 var captured = 0;
                 var shapebound = new createEllipse(points);
                 for (var i = 0; i &lt; nElements; i++){
-                    captured = 0;
                     captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], inclusive)
                     if (captured == 1){ 
                         hits[count] = i;
@@ -328,7 +324,6 @@ VisDock.selectionHandler = {
                 var captured = 0;
                 var shapebound = new createLine(points);
                 for (var i = 0; i &lt; nElements; i++){
-                    captured = 0;
                     captured = shapebound.intersectLine(CircleElements[i].childNodes[1], inclusive)
                     if (captured == 1){ 
                         hits[count] = i;
@@ -363,7 +358,8 @@ VisDock.selectionHandler = {
 }
 </code></pre>
 <br>
-- Screenshots of the final products: exploration and annotations
+<br>
+### Screenshots of the final products:
 <br>
 <img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorial/tigerdone.png?raw=true" height = "500" width = "500">
 <img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorial/circlepackdone.png?raw=true" height = "450" width = "500">
