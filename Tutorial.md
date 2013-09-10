@@ -106,35 +106,35 @@ function is invoked when
 	<br>
 <pre><code>
 VisDock.selectionHandler = {
-        getHitsPolygon: function(points, inclusive){
+        getHitsPolygon: function(points, inclusive) {
         // This event is called when selections are made using Polygon, Lasso and Rectangular tools.
 
             return hits; 
         },
             
-        getHitsEllipse: function(points, inclusive){
+        getHitsEllipse: function(points, inclusive) {
         // This event is called when selections are made using made using Ellipse Tool.
             
             return hits; 
         },
             
-        getHitsLine: function(points, inclusive){
+        getHitsLine: function(points, inclusive) {
         // This event is called when selections are made using Polyline, Straightline, and Freeselection tools.
             
             return hits; 
         },
             
-        setColor: function(hits){
+        setColor: function(hits) {
         // This event is called when the user wants to change the colors of the selection layers.
             
         },
             
-        changeVisibility: function(vis, query){
+        changeVisibility: function(vis, query) {
         // This event is called when the user wants to change the visibility of the selection layers.
             
         },
             
-        removeColor: function(hits, index){
+        removeColor: function(hits, index) {
         // This event is called when the user wants to remove the colour of the selection layers.
             
         },
@@ -142,32 +142,32 @@ VisDock.selectionHandler = {
 </code>
 </pre>  
 <br>
-- Cross-cutting seletions (tiger example): UtilitiesLibrary.js provides various functions that users
-can utilize. Tiger visualization consists of only svg path elements. Therefore, only comparison between
-path elements and shapes needs to be made. We will provide an example.
+- Cross-cutting seletions (tiger example): visdock.utils.js provides various functions that users
+can utilize. The tiger picture example consists of only SVG path elements. Therefore, only comparison
+between SVG path elements and shapes needs to be made. We will provide an example.
  + getHitsPolygon: this event will be called when the users make selections with Lasso, Polygon and
 Rectangle tools.
 <br>
 <pre><code>
-getHitsPolygon: function(points, inclusive, t){
-            var aa = getPaths(); // look up all the path elements and store them in the variable 'aa'
-            var nElements = getNumberOfPaths(); 
-            var hits = []; // this stores information about objects or objects themselves that 
-                            intersect the user-drawn polygon.
+getHitsPolygon: function(points, inclusive) {
+            var pathObjects = d3.selectAll("path")[0]; 
+            var nElements = pathObjects.length
+            var hits = []; 
             var count = 0;
-            var captured = 0;
-            t = [200,200]; // this transformation has scale and translation.
-            var shapebound = PolygonInit(points,t); // shapebound is a new polygon object 
-                                                        which has the shape created by using
-                                                        selection tools.
-            for (var i=0; i&lt;nElements; i++){
+            var captured = 0; 
+
+            // shapebound is a new polygon object for the polygon created by using selection tools.
+            var shapebound = new createPolygon(points); 
+            for (var i = 0; i &lt; nElements; i++) {
                 captured = 0;
-                captured = PathPolygonIntersection(points,shapebound,aa[i],inclusive,t); 
-                // captured will have 0 if the path element 'aa[i]' and shapebound do not intersect
-                // Otherwise, it will haev 1
+                captured = shapebound.intersectPath(pathObjects[i], inclusive, t); 
+                // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
+                         intersect
+                // Otherwise, it will have 1
                 if (captured == 1){
-                    hits[count] = i; // we are storing the index of the path object. But the users may
-                                        choose to store other information or the object itself.
+                    // we are storing the index of the path object. But the users may
+                            choose to store other information or the object itself.
+                    hits[count] = i; 
                     count++;
                 }
             }
@@ -178,18 +178,25 @@ getHitsPolygon: function(points, inclusive, t){
  + getHitsEllipse: similarly, this event will be called when the users make selections with Ellipse tool.
 <br>
 <pre><code>
-getHitsEllipse: function(points, inclusive, t){
-            var aa = getPaths();
-            var nElements = getNumberOfPaths();	
-            var hits = [];
+getHitsEllipse: function(points, inclusive){
+            var pathObjects = d3.selectAll("path")[0]; 
+            var nElements = pathObjects.length
+            var hits = []; 
             var count = 0;
-            var captured = 0;
-            var ellipse = EllipseInit(points, t);
-            for (var i=0; i%lt;nElements; i++){
+            var captured = 0; 
+
+            // shapebound is a new ellipse object for the ellipse created by using Ellipse tool.
+            var shapebound = new createEllipse(points); 
+            for (var i = 0; i %lt; nElements; i++) {
                 captured = 0;
                 captured = PathEllipseIntersection(ellipse,aa[i],inclusive,t);
+                // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
+                         intersect
+                // Otherwise, it will have 1
                 if (captured == 1){
-                    hits[count] = i;
+                    // we are storing the index of the path object. But the users may
+                            choose to store other information or the object itself.
+                    hits[count] = i; 
                     count++;
                 }
             }
@@ -201,10 +208,10 @@ getHitsEllipse: function(points, inclusive, t){
 binary operations between queries (common, union, or XOR).
 <br>
 <pre><code>
-setColor: function(hits, t){
-            var aa = getCircles();
-            for (var i=0;i&lt;hits.length;i++){
-                addPathLayer(aa[hits[i]],t); // t is the transformation matrix
+setColor: function(hits) {
+            var pathObjects = d3.selectAll("path")[0]; 
+            for (var i = 0; i &lt; hits.length; i++) {
+                VisDock.utils.addPathLayer(pathObjects[hits[i]]);
             }
 },
 </code></pre>
@@ -212,9 +219,9 @@ setColor: function(hits, t){
  + changeColor: this function will be called when the users wish to change the color of a query or queries.
 <br>
 <pre><code>
-changeColor: function(color, query){
-            for (var i=0;i&lt;query.length;i++){
-                query[i].attr("fill",color)
+changeColor: function(color, query) {
+            for (var i=0; i &lt; query.length; i++){
+                query[i].attr("fill", color)
             }
 },
 </code></pre>
@@ -222,9 +229,9 @@ changeColor: function(color, query){
  + changeVisibility: this function will be called when the users wish to change the visibility of
 Freeselection tools.
 <pre><code>
-changeVisibility: function(vis, query){
-            for (var i=0;i&lt;query.length;i++){
-                query[i].attr("opacity",vis);
+changeVisibility: function(vis, query) {
+            for (var i = 0; i &lt; query.length; i++) {
+                query[i].attr("opacity", vis);
             }
 },
 </code></pre>
