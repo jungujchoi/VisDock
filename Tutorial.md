@@ -40,8 +40,8 @@ and another visualization created with d3.js found on this <a href="http://bl.oc
 <br>
 <br>
 - Attach the visualization onto 'viewport' (<a href="http://bl.ocks.org/mbostock/4063530">circle packet
-example</a>): this step may become complex if you are using a non-SVG frame (such as Div or 
-. But the underlying concept is that you need to extract all the svg objects from the pre-made
+example</a>): this step may become complex if you are using a non-SVG frame (such as Div or Raphael.js Paper).
+But the underlying concept is that you need to extract all the SVG objects from the pre-made
 visualization and push them onto 'viewport.' Some examples created with d3.js do not require this step
 since it may only take the users to change the pre-defined svg space to 'viewport.'
 <pre>
@@ -70,39 +70,38 @@ d3.json("circle.json", function(error, root) {
 </code>
 </pre>
 <br>
-- Attach the visualization onto 'viewport' (<a href="http://raphaeljs.com/tiger.html">tiger example</a>): But for an example 
-created with Raphael.js this step will most certainly necessary.
+- Attach the visualization onto 'viewport' (<a href="http://raphaeljs.com/tiger.html">tiger example</a>):
+If you use Raphael.js Paper, it requires that you manually pop each element from the Paper frame and attach
+it back on 'viewport.' This step can be very tedious so we will just use 
+<a href="http://upload.wikimedia.org/wikipedia/commons/f/fd/Ghostscript_Tiger.svg">an SVG rendered picture
+</a>of the tiger example. 
 <pre>
-<code>
-var r = Raphael(tiger).translate(200, 200); // here, the translation (200, 200) depends on the user's screen resolution
-for (var i=0;i&lt;r.length;i++){
-        var d = r[i][0].getAttributeNS(null,"d"); // 'd' attribute of svg path
-        var stroke = r[i][0].getAttributeNS(null,"stroke"); // 'stroke' attribute of svg path
-        var fill = r[i][0].getAttributeNS(null,"fill"); // 'fill' attribute of svg path
-        var swidth = r[i][0].getAttributeNS(null,"stroke-width"); // 'stroke-width' attribute of svg path
-        var tform = r[i][0].getAttributeNS(null,"transform"); // 'transform' attribute of svg path
-        viewport.append("path") // putting elements onto viewport
-            .attr("d",d)
-            .attr("stroke",stroke)
-            .attr("fill",fill)
-            .attr("stroke-width",swidth)
-            .attr("transform",tform)
-}
-r.remove() // removing the original elements
+<code>&lt;svg&gt;
+        &lt;!-- Here are the SVG objects for the tiger example --!&gt;
+&lt;/svg&gt;
+&lt;scrip&gt;
+        var svgObjects = document.getElementsByTagName("g")[0]; // stores all the SVG objects in svgObjects
+        for (var i = 0; i &lt; svgObjects.length; i++) {
+            viewport.appendChild(svgObjects[i]); // append the SVG objects into 'viewport'
+            svgObjects[i].remove(); // Once the SVG objects are succesfully attached onto 'viewport'
+                                            we can remove the original ones.
+        }
+&lt;/script&gt;
 </code>
 </pre>
 <br>
 - After initialization: at this stage, VisDock utilities are functional, which means users may draw shapes, pan and zoom in
-          and out, and make annotations. But until Selection Handler is properly set, selection methods will not work 
-          correctly.
+ and out, and make annotations. But until VisDock Event Handler is properly implemented, selection methods
+will not work correctly.
 <br><br>
-<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/tiger.png?raw=true" height = "400" width = "400">
-<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/bubblepacket.png?raw=true" height = "380" width = "400">
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorial/tiger.png?raw=true" height = "400" width = "400">
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorial/bubblepacket.png?raw=true" height = "380" width = "400">
 <br>
 <br>
-- Selection Handler: Selection Handler is a function inherent in the VisDock library. This function is invoked when
+- Selection Handler: Selection Handler is a VisDock event handler inherent in the VisDock library. This
+function is invoked when
           a selection is made by users. This handles not only the intersections of user-drawn selection shapes and the
-          svg objects of the host visualization but also other events such as 'setColor','removeColor', and 'changeColor'
+          SVG objects of the host visualization but also other events such as 'setColor','removeColor', and 'changeColor'
           for the selected objects. We will provide the skeleton function here. 
 	<br>
 <pre><code>
