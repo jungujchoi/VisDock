@@ -109,7 +109,23 @@ Inside the visdock class are a few important functions that are desgined to aid 
 The newly created layers have visibility and color attributes. Some of these functions can add/change these
 attributes as the users desire.
 
-  - 
-   
+  - VisDock.utils.getQueryColor(index): returns the RGB color (#0000FF) or color name (blue) of the query. The
+input argument is the index of the query.<br>
+  - VisDock.utils.getQueryVisibility(index): returns the visibility of the query layers. <br>
+  - VisDock.utils.addPathLayer(path): creates an SVG path layer on top of the SVG path element
+passed as argument. Its 'path data' attribute would be the same but its color and visibility attributes are
+governed by Query Manager. Its 'class' attribute would be "VisDockPathLayer."
+  - VisDock.utils.addPolygonLayer(polygon): creates an SVG polygon layer on top of the SVG polygon element
+passed as argument. Its 'points' attribute would be the same but its color and visibility attributes are
+governed by Query Manager. Its 'class' attribute would be "VisDockPolygonLayer."
+  - VisDock.utils.addEllipseLayer(ellipse): creates an SVG ellipse layer on top of the SVG ellipse element
+passed as argument. Its radii and center cooridinates attributes would be the same but its color and visibility
+attributes are governed by Query Manager. Its 'class' attribute would be "VisDockEllipseLayer."
+  - VisDock.utils.addLineLayer(line): creates an SVG line/polyline layer on top of the SVG line/polyline
+elemtnt passed as argument. Its 'points' attribute would be the same but its color and visibility attributes
+are governed by Query Manager. Its 'class' attribute would be "VisDockLineLayer."
+  - VisDock.utils.addTextLayer(label): creates an SVG label layer on top of the SVG label
+elemtnt passed as argument. Its 'style' attribute and text would be the same but its color and visibility
+attributes are governed by Query Manager. Its 'class' attribute would be "VisDockTextLayer."
 <a href="https://github.com/jungujchoi/VisDock/blob/master/Tutorials.md">Go to VisDock Tutorials</a>
 ------------------------------------------------------------------------------------------------------
