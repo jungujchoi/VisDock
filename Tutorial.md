@@ -1,40 +1,47 @@
 # VisDock Tutorials
-- Import VisDock and related libraries: you need to import VisDock.js along with 2D.js, IntersectionUtilities.js, and UtilitiesLibrary.js first. These library files can be found <a href="https://github.com/jungujchoi/VisDock/">here</a>. Of these library files, 2D.js and IntersectionUtilies.js were created by <a href="http://www.kevlindev.com">Kevin Linsey Software Development</a> and they can be downloaded from <a href="http://www.kevlindev.com">www.kevindev.com</a> as well.
+- Import VisDock and related libraries: you need to import VisDock.js along with 2D.js,
+IntersectionUtilities.js, and UtilitiesLibrary.js first. These library files can be found
+ <a href="https://github.com/jungujchoi/VisDock/">here</a>. Of these library files, 2D.js
+and IntersectionUtilies.js were created by <a href="http://www.kevlindev.com">Kevin Lindsey Software 
+Development</a> and they can be liked directly to their remote URL or can be downloaded from
+from <a href="http://www.kevlindev.com">www.kevindev.com</a> as well.
 <pre>
 <code style="margin-left: 30px">&lt;script type="text/javascript" src="visdock.js"&gt;&lt;/script&gt;</code><br>
-<code style="margin-left: 30px">&lt;script type="text/javascript" src="2d.js"&gt;&lt;/script&gt;</code><br>
-<code style="margin-left: 30px">&lt;script type="text/javascript" src="intersectionUtilities.js"&gt;&lt;/script&gt;</code><br>
+<code style="margin-left: 30px">&lt;script type="text/javascript" src="http://www.kevlindev.com/gui/2D.js" &gt;&lt;/script&gt;</code><br>
+<code style="margin-left: 30px">&lt;script type="text/javascript" src="http://www.kevlindev.com/geometry/2D/intersections/IntersectionUtilities.js" &gt;&lt;/script&gt;</code><br>
 <code style="margin-left: 30px">&lt;script type="text/javascript" src="UtilitiesLibrary.js"&gt;&lt;/script&gt;</code>
 </pre>
 <br>
-- Initialize VisDock: this initialization step physically attaches the VisDock onto your visualization. You must pass the width and heigh
-					of your visualization as parameters. However, at this stage, the VisDock tools will not function
-					correctly. VisDock Selection Handler needs to be properly first. <br>
+- Initialize VisDock: this initialization step physically attaches the VisDock onto your visualization. 
+You must pass the width and heigh of your visualization as parameters. However, at this stage,
+the VisDock tools will not function correctly. VisDock Event Handler needs to be 
+implemented properly first. <br>
 <br>
 <code style="margin-left: 30px">VisDock.init("body", width, height);</code>
-<br>
-<br>
-- Initialize viewport: this step creates an svg frame where your host visualization will reside. In this
-case, the code below makes the variable 'viewport' such svg. <br>
+<br><br>
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorial/init.png?raw=true" height = "400" width = "400">
+<br><br>
+- Initialize viewport: this step creates an SVG frame where your host visualization will reside. In this
+case, the line below makes the variable 'viewport' such become this SVG frame. <br>
 <br>
 <code style="margin-left: 30px">var viewport = VisDock.getViewport();</code>
 <br>
 <br>
-- Make a visualization: you may create a visualization in 'viewport' (the svg frame created in the previous step).
+- Make a visualization: you may create a visualization in 'viewport' (the SVG frame created in the previous step).
 This is not very difficult a task. When you are done with your visualization, you may skip the next few
 steps and go to 'Selection Handler.'
-But if you wish to adopt VisDock onto a pre-made visualization, it may take an extra work to do so.
-In this case, we will use a visualization created with Raphael.js found on this <a href="http://raphaeljs.com/tiger.html">link</a>
+But if you wish to adopt VisDock onto a pre-made visualization, it may take a few extra steps.
+We will use a visualization created with Raphael.js found on this <a href="http://raphaeljs.com/tiger.html">link</a>
 and another visualization created with d3.js found on this <a href="http://bl.ocks.org/mbostock/4063530">link</a>.
 <br>
 <br>
-<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/tigervis.png?raw=true" height = "400" width = "400">
-<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorials/circlepackbefore.png?raw=true" height = "400" width = "400">
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorial/tigervis.png?raw=true" height = "400" width = "400">
+<img src="https://github.com/jungujchoi/VisDock/blob/master/Tutorial/circlepackbefore.png?raw=true" height = "400" width = "400">
 <br>
 <br>
-- Attach the visualization onto 'viewport' (<a href="http://bl.ocks.org/mbostock/4063530">circle packet example</a>):
-this step may become complex if you are not making the visualization
-from scratch. But the underlying concept is that you need to extract all the svg objects from the pre-made
+- Attach the visualization onto 'viewport' (<a href="http://bl.ocks.org/mbostock/4063530">circle packet
+example</a>): this step may become complex if you are using a non-SVG frame (such as Div or 
+. But the underlying concept is that you need to extract all the svg objects from the pre-made
 visualization and push them onto 'viewport.' Some examples created with d3.js do not require this step
 since it may only take the users to change the pre-defined svg space to 'viewport.'
 <pre>
