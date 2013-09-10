@@ -160,7 +160,7 @@ getHitsPolygon: function(points, inclusive) {
             var shapebound = new createPolygon(points); 
             for (var i = 0; i &lt; nElements; i++) {
                 captured = 0;
-                captured = shapebound.intersectPath(pathObjects[i], inclusive, t); 
+                captured = shapebound.intersectPath(pathObjects[i], inclusive); 
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
                          intersect
                 // Otherwise, it will have 1
@@ -189,7 +189,7 @@ getHitsEllipse: function(points, inclusive){
             var shapebound = new createEllipse(points); 
             for (var i = 0; i %lt; nElements; i++) {
                 captured = 0;
-                captured = PathEllipseIntersection(ellipse,aa[i],inclusive,t);
+                captured = shapebound.intersectPath(pathObjects[i], inclusive);
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
                          intersect
                 // Otherwise, it will have 1
@@ -204,6 +204,38 @@ getHitsEllipse: function(points, inclusive){
         },
 </code></pre>
 <br>
+ + getHitsLine: this function will be called when the users make selections with StraightLine, Polyline, and
+Freeselection tools.
+<br>
+<pre><code>
+getHitsLine: function(points, inclusive) {
+            var pathObjects = d3.selectAll("path")[0]; 
+            var nElements = pathObjects.length
+            var hits = []; 
+            var count = 0;
+            var captured = 0; 
+
+            // shapebound is a new line object for the line created by using StraightLine, Polyline, and
+                   Freeselection tools.
+            var shapebound = new createLine(points); 
+            for (var i = 0; i %lt; nElements; i++) {
+                captured = 0;
+                captured = shapebound.intersectPath(pathObjects[i], inclusive);
+                // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
+                         intersect
+                // Otherwise, it will have 1
+                if (captured == 1){
+                    // we are storing the index of the path object. But the users may
+                            choose to store other information or the object itself.
+                    hits[count] = i; 
+                    count++;
+                }
+            }
+            return hits;
+    },
+</pre></code>
+<br>
+
  + setColor: this function will be called when a query is made by either making new selections or performing
 binary operations between queries (common, union, or XOR).
 <br>
@@ -238,38 +270,17 @@ changeVisibility: function(vis, query) {
 <br>
  + removeColor: this function will be called when the users wish to remove the layers for a query or queries.
 <pre><code>
-removeColor: function(hits, index){
-            for (var i=0;i&lt;hits.length;i++){
+removeColor: function(hits, index) {
+            for (var i = 0; i &lt; hits.length; i++) {
                 hits[i].remove();
             }
     },
 </code></pre>
  + QueryClick: this function is completely optional. The users may add this function to handle events when
-a query box is clicked in the query list. For the tiger example, we'll leave this function out.
+a query box is clicked in the query list. For the time being, we'll leave this function out.
 </code></pre>
 <br>
- + getHitsLine: this function will be called when the users make selections with StraightLine, Polyline, and
-Freeselection tools.
-<br>
-<pre><code>
-getHitsLine: function(points, inclusive){
-            var aa = getPaths();
-            var nElements = getNumberOfPaths(); 	
-            var hits = [];
-            var count = 0;
-            var captured = 0;
-            for (var i=0; i&lt;nElements; i++){
-                captured = 0;
-                captured = PathLineIntersection(points,aa[i]);
-                if (captured == 1){
-                    hits[count] = i;
-                    count++;
-                }
-            }
-            return hits;
-    },
-</pre></code>
-<br>
+
 - Circle Packet example: the circle packet example is written in a very similar manner except that the
 condition checking function is used. The lines are a little bit different. For instance:
  + Node checking: getHits functions use 'getNodes' and 'CheckNodeConditions.' 
