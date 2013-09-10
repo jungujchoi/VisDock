@@ -108,24 +108,33 @@ a line and another line).
 Inside the visdock class are a few important functions that are desgined to aid proper display of the layers. 
 The newly created layers have visibility and color attributes. Some of these functions can add/change these
 attributes as the users desire.
-
-  - VisDock.utils.getQueryColor(index): returns the RGB color (#0000FF) or color name (blue) of the query. The
+  - Query attributes retrieval: the following functions return the color and visibility attributes of the
+query.
+    + VisDock.utils.getQueryColor(index): returns the RGB color (#0000FF) or color name (blue) of the query. The
 input argument is the index of the query.<br>
-  - VisDock.utils.getQueryVisibility(index): returns the visibility of the query layers. <br>
-  - VisDock.utils.addPathLayer(path): creates an SVG path layer on top of the SVG path element
+    + VisDock.utils.getQueryVisibility(index): returns the visibility of the query layers.
+    
+  - Layer management: the following functions create layers for the queried objects.
+
+    + VisDock.utils.addPathLayer(path): creates an SVG path layer on top of the SVG path element
 passed as argument. Its 'path data' attribute would be the same but its color and visibility attributes are
 governed by Query Manager. Its 'class' attribute would be "VisDockPathLayer."
-  - VisDock.utils.addPolygonLayer(polygon): creates an SVG polygon layer on top of the SVG polygon element
+<br>
+    + VisDock.utils.addPolygonLayer(polygon): creates an SVG polygon layer on top of the SVG polygon element
 passed as argument. Its 'points' attribute would be the same but its color and visibility attributes are
-governed by Query Manager. Its 'class' attribute would be "VisDockPolygonLayer."
-  - VisDock.utils.addEllipseLayer(ellipse): creates an SVG ellipse layer on top of the SVG ellipse element
+governed by Query Manager. Its 'class' attribute would be "VisDockPolygonLayer." 
+<br>
+    + VisDock.utils.addEllipseLayer(ellipse): creates an SVG ellipse layer on top of the SVG ellipse element
 passed as argument. Its radii and center cooridinates attributes would be the same but its color and visibility
 attributes are governed by Query Manager. Its 'class' attribute would be "VisDockEllipseLayer."
-  - VisDock.utils.addLineLayer(line): creates an SVG line/polyline layer on top of the SVG line/polyline
+<br>
+    + VisDock.utils.addLineLayer(line): creates an SVG line/polyline layer on top of the SVG line/polyline
 elemtnt passed as argument. Its 'points' attribute would be the same but its color and visibility attributes
 are governed by Query Manager. Its 'class' attribute would be "VisDockLineLayer."
-  - VisDock.utils.addTextLayer(label): creates an SVG label layer on top of the SVG label
+<br>
+    + VisDock.utils.addTextLayer(label): creates an SVG label layer on top of the SVG label
 elemtnt passed as argument. Its 'style' attribute and text would be the same but its color and visibility
 attributes are governed by Query Manager. Its 'class' attribute would be "VisDockTextLayer."
+
 <a href="https://github.com/jungujchoi/VisDock/blob/master/Tutorials.md">Go to VisDock Tutorials</a>
 ------------------------------------------------------------------------------------------------------
