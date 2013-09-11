@@ -9,9 +9,9 @@
 *****/
 
 Array.prototype.foreach=function(func){for(var i=0;i<this.length;i++)func(this[i]);};
-Array.prototype.map=function(func){var result=new Array();for(var i=0;i<this.length;i++)result.push(func(this[i]));return result;};
-Array.prototype.min=function(){var min=this[0];for(var i=0;i<this.length;i++)if(this[i]<min)min=this[i];return min;}
-Array.prototype.max=function(){var max=this[0];for(var i=0;i<this.length;i++)if(this[i]>max)max=this[i];return max;}
+//Array.prototype.map=function(func){alert("a");var result=new Array();for(var i=0;i<this.length;i++)result.push(func(this[i]));return result;};
+Array.prototype.min=function(){alert("b");var min=this[0];for(var i=0;i<this.length;i++)if(this[i]<min)min=this[i];return min;}
+Array.prototype.max=function(){alert("c");var max=this[0];for(var i=0;i<this.length;i++)if(this[i]>max)max=this[i];return max;}
 AntiZoomAndPan.VERSION="1.2"
 function AntiZoomAndPan(){this.init();}
 AntiZoomAndPan.prototype.init=function(){var svgRoot=svgDocument.documentElement;this.svgNodes=new Array();this.x_trans=0;this.y_trans=0;this.scale=1;this.lastTM=svgRoot.createSVGMatrix();svgRoot.addEventListener('SVGZoom',this,false);svgRoot.addEventListener('SVGScroll',this,false);svgRoot.addEventListener('SVGResize',this,false);};

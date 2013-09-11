@@ -3496,11 +3496,12 @@ var VisDock = {
     },
     utils: {
     	getQueryColor: function(index){
-    		alert(QueryManager.colors[index])
     		return QueryManager.colors[index];
     	},
+    	changeQueryColor: function(index, color){
+    		QueryManager.colors[index] = color;
+    	},    	
      	getQueryVisibility: function(index){
-     		alert(QueryManager.visibility[index])
      		return QueryManager.visibility[index];
      	},
     	addPathLayer: function(path){

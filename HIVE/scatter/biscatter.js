@@ -1,26 +1,18 @@
 // SVG
-var svg = d3.select("#visualization").append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+//var svg = d3.select("#visualization").append("svg")
+//  .attr("width", width + margin.left + margin.right)
+//  .attr("height", height + margin.top + margin.bottom)
+//  .append("g")
+//  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+VisDock.init("body", 1050, 800); 
+var viewport = VisDock.getViewport();
+Panel.x = margin.left;
+Panel.y = margin.top;
+Panel.setTransform();
+//viewport.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var svg = viewport;
 // Get Data
-d3.csv("biscatter_cars_30_g1.csv", function(data) {
-// d3.csv("<%= '#{root_path}/intuitive/show.csv' %>", function(data) {
-  dataset = data;
-
-  var key = d3.keys(dataset[0]);
-  alert(key[2])
-  // console.log(key);
-
-
-  // Scaling
-  //// Linear xScaring
-  // var xScaling = d3.scale.linear()
-  //                .domain(d3.extent(dataset, function(d, i){ return +d[key[1]]}))
-  //                .range([0, width]);
-
+d3.csv("biscatter_cars_30_g1.csv", function(dataset) {  var key = d3.keys(dataset[0]);
   //// Ordinal xScaing
   var xScaling = d3.scale.linear()
     .domain([0, Math.ceil(d3.max(dataset, function(d, i) {
@@ -73,8 +65,7 @@ d3.csv("biscatter_cars_30_g1.csv", function(data) {
   var label = svg.selectAll(".text").data(dataset).enter()
     .append("text")
     .attr("x", function(d, i) {
-    	alert(d)
-    	//alert(d[key[2]])
+    	//alert(d[0])
       return xScaling(+d[key[2]]);// + xScaling.rangeBand() / 2 + 10;
     })
     .attr("y", function(d, i) {
