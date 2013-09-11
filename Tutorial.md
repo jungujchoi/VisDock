@@ -161,11 +161,11 @@ getHitsPolygon: function(points, inclusive) {
             for (var i = 0; i &lt; nElements; i++) {
                 captured = shapebound.intersectPath(pathObjects[i], inclusive); 
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
-                         intersect
+                        // intersect
                 // Otherwise, it will have 1
                 if (captured == 1) {
                     // we are storing the index of the path object. But the users may
-                            choose to store other information or the object itself.
+                           // choose to store other information or the object itself.
                     hits[count] = i; 
                     count++;
                 }
@@ -189,11 +189,11 @@ getHitsEllipse: function(points, inclusive) {
             for (var i = 0; i &lt; nElements; i++) {
                 captured = shapebound.intersectPath(pathObjects[i], inclusive);
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
-                         intersect
+                        // intersect
                 // Otherwise, it will have 1
                 if (captured == 1) {
                     // we are storing the index of the path object. But the users may
-                            choose to store other information or the object itself.
+                           // choose to store other information or the object itself.
                     hits[count] = i; 
                     count++;
                 }
@@ -214,16 +214,16 @@ getHitsLine: function(points, inclusive) {
             var captured = 0; 
 
             // shapebound is a new line object for the line created by using StraightLine, Polyline, and
-                   Freeselection tools.
+                  // Freeselection tools.
             var shapebound = new createLine(points); 
             for (var i = 0; i &lt; nElements; i++) {
                 captured = shapebound.intersectPath(pathObjects[i], inclusive);
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
-                         intersect
+                        // intersect
                 // Otherwise, it will have 1
                 if (captured == 1) {
                     // we are storing the index of the path object. But the users may
-                            choose to store other information or the object itself.
+                           // choose to store other information or the object itself.
                     hits[count] = i; 
                     count++;
                 }
