@@ -9,7 +9,7 @@ from <a href="http://www.kevlindev.com">www.kevindev.com</a> as well.
 <code style="margin-left: 30px">&lt;script type="text/javascript" src="visdock.js"&gt;&lt;/script&gt;</code><br>
 <code style="margin-left: 30px">&lt;script type="text/javascript" src="http://www.kevlindev.com/gui/2D.js" &gt;&lt;/script&gt;</code><br>
 <code style="margin-left: 30px">&lt;script type="text/javascript" src="http://www.kevlindev.com/geometry/2D/intersections/IntersectionUtilities.js" &gt;&lt;/script&gt;</code><br>
-<code style="margin-left: 30px">&lt;script type="text/javascript" src="UtilitiesLibrary.js"&gt;&lt;/script&gt;</code>
+<code style="margin-left: 30px">&lt;script type="text/javascript" src="visdock.utils.js"&gt;&lt;/script&gt;</code>
 </pre>
 <br>
 - Initialize VisDock: this initialization step physically attaches the VisDock onto your visualization. 
