@@ -284,77 +284,77 @@ VisDock.selectionHandler in the circle packet example.
 <br>
 <pre><code>
 VisDock.selectionHandler = {
-            getHitsPolygon: function(points, inclusive, t) {
-                var CircleElements = d3.selectAll(".leaf")[0];
-                var nElements = CircleElements.length;		
-                var hits = [];
-                var count = 0;
-                var captured = 0;
-                var shapebound = new createPolygon(points);
-                for (var i = 0; i &lt; nElements; i++) {
-                    captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], inclusive)
-                    if (captured == 1) { 
-                        hits[count] = i;
-                        count++;
-                    }
+        getHitsPolygon: function(points, inclusive, t) {
+            var CircleElements = d3.selectAll(".leaf")[0];
+            var nElements = CircleElements.length;		
+            var hits = [];
+            var count = 0;
+            var captured = 0;
+            var shapebound = new createPolygon(points);
+            for (var i = 0; i &lt; nElements; i++) {
+                captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], inclusive)
+                if (captured == 1) { 
+                    hits[count] = i;
+                    count++;
                 }
-                return hits;
-            },
-            getHitsEllipse: function(points, inclusive, t) {
-                var CircleElements = d3.selectAll(".leaf")[0];
-                var nElements = CircleElements.length;		
-                var hits = [];
-                var count = 0;
-                var captured = 0;
-                var shapebound = new createEllipse(points);
-                for (var i = 0; i &lt; nElements; i++) {
-                    captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], inclusive)
-                    if (captured == 1) { 
-                        hits[count] = i;
-                        count++;
-                    }
-                }
-                return hits;
-            },
-            getHitsLine: function(points, inclusive) {
-                var CircleElements = d3.selectAll(".leaf")[0];
-                var nElements = CircleElements.length;		
-                var hits = [];
-                var count = 0;
-                var captured = 0;
-                var shapebound = new createLine(points);
-                for (var i = 0; i &lt; nElements; i++) {
-                    captured = shapebound.intersectLine(CircleElements[i].childNodes[1], inclusive)
-                    if (captured == 1) { 
-                        hits[count] = i;
-                        count++;
-                    }
-                }
-                return hits;
-            },
-            setColor: function(hits) {
-                var CircleElements = d3.selectAll(".leaf")[0];
-		for (var i = 0; i &lt; hits.length; i++) {
-		    VisDock.utils.addEllipseLayer(CircleElements[hits[i]].childNodes[1]);
-		}
-            },
-            changeColor: function(color, query, index) {
-	        var visibility = VisDock.utils.getQueryVisibility(index);	
-		for (var i = 0; i &lt; query.length; i++) {
-		    query[i].attr("style", "opacity: " + visibility + "; fill: " + color)
-		}
-            },
-            changeVisibility: function(vis, query, index) {
-		var color = VisDock.utils.getQueryColor(index);
-		for (var i = 0; i &lt; query.length; i++) {
-		    query[i].attr("style", "opacity: " + vis + "; fill: " + color)
-		}
-            },
-            removeColor: function(hits, index) {
-		for (var i = 0; i &lt; hits.length; i++) {
-		    hits[i].remove();
-		}
             }
+            return hits;
+        },
+        getHitsEllipse: function(points, inclusive, t) {
+            var CircleElements = d3.selectAll(".leaf")[0];
+            var nElements = CircleElements.length;		
+            var hits = [];
+            var count = 0;
+            var captured = 0;
+            var shapebound = new createEllipse(points);
+            for (var i = 0; i &lt; nElements; i++) {
+                captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], inclusive)
+                if (captured == 1) { 
+                    hits[count] = i;
+                    count++;
+                }
+            }
+            return hits;
+        },
+        getHitsLine: function(points, inclusive) {
+            var CircleElements = d3.selectAll(".leaf")[0];
+            var nElements = CircleElements.length;		
+            var hits = [];
+            var count = 0;
+            var captured = 0;
+            var shapebound = new createLine(points);
+            for (var i = 0; i &lt; nElements; i++) {
+                captured = shapebound.intersectLine(CircleElements[i].childNodes[1], inclusive)
+                if (captured == 1) { 
+                    hits[count] = i;
+                    count++;
+                }
+            }
+            return hits;
+        },
+        setColor: function(hits) {
+            var CircleElements = d3.selectAll(".leaf")[0];
+            for (var i = 0; i &lt; hits.length; i++) {
+                VisDock.utils.addEllipseLayer(CircleElements[hits[i]].childNodes[1]);
+            }
+        },
+        changeColor: function(color, query, index) {
+        var visibility = VisDock.utils.getQueryVisibility(index);	
+            for (var i = 0; i &lt; query.length; i++) {
+                query[i].attr("style", "opacity: " + visibility + "; fill: " + color)
+            }
+        },
+        changeVisibility: function(vis, query, index) {
+            var color = VisDock.utils.getQueryColor(index);
+            for (var i = 0; i &lt; query.length; i++) {
+                query[i].attr("style", "opacity: " + vis + "; fill: " + color)
+            }
+        },
+        removeColor: function(hits, index) {
+            for (var i = 0; i &lt; hits.length; i++) {
+                hits[i].remove();
+            }
+        }
 }
 </code></pre>
 <br>
