@@ -21,15 +21,19 @@ text {
 
 </style>
 <body>
+	<div id = "divTest" >
+		
+	</div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="visdock.js"></script>
-    <script src="2D.js"></script>
-    <script src="IntersectionUtilities.js"></script>
+    <script src="2d.js"></script>
+    <script src="intersectionUtilities.js"></script>
     <script src="UtilitiesLibrary.js"></script>
     <script src="visdock.utils.js"></script>
 <script>
-
-    VisDock.init("body", 1200, 1000);
+	var test = d3.select("#divTest")
+	alert(test)
+    VisDock.init("#divTest", 1200, 1000);
 
     VisDock.SelectShape = "circle"
     VisDock.color = ["red","magenta","orange","yellow","OliveDrab","green","DeepSkyBlue","SlateBlue"];
@@ -38,7 +42,7 @@ text {
 
     var viewport = VisDock.getViewport();
     viewport.attr("class", "chart");
-
+VisDock.svg.attr("transform","scale(0.5)")
 VisDock.selectionHandler = {
     getHitsPolygon: function(points, inclusive){
 
@@ -49,12 +53,12 @@ VisDock.selectionHandler = {
 	var captured = 0;
 	var shapebound = new createPolygon(points);
 	for (var i=0; i<nElements; i++){
- 	    captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], inclusive, 0)
+ 	    captured = 0;
+ 	    captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], true, 0)
 	    if (captured == 1){ 
 			hits[count] = i;
 			count++;
 	    }
-	    //alert(captured)
 	}
 	return hits;
 
@@ -67,10 +71,10 @@ VisDock.selectionHandler = {
 		var count = 0;
 		var captured = 0;
 
-		var shapebound = new createEllipse(points);
-		
+		var shapebound = new createEllipse(points);;
 		for (var i=0; i<nElements; i++){
- 	    	captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], inclusive, 0)
+ 	    	captured = 0;
+ 	    	captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], true, 0)
 		
 	    	if (captured == 1){
 				hits[count] = i;
@@ -88,7 +92,8 @@ VisDock.selectionHandler = {
 		var shapebound = new createLine(points);
 
 		for (var i=0; i<nElements; i++){
- 	        captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], inclusive, 0)
+ 		    captured = 0;
+ 	        captured = shapebound.intersectEllipse(CircleElements[i].childNodes[1], true, 0)
 		    if (captured == 1){
 		    	hits[count] = i;
 				count++;

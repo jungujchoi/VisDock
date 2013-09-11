@@ -24,7 +24,7 @@ function createPolygon(points){
 	this.shapebound2D = new Polygon(shapebound);
 	this.vector_points = vector_points;
 }
-createPolygon.prototype.intersectPath = function(path, inclusive, t) {
+createPolygon.prototype.intersectPath = function(path, inclusive) {
 	var P=new Path(path);
 	var s=path.getAttributeNS(null,"d")
 	var rel = ["M","L","H","V","C","S","Q","T","A","Z"," ",","];
@@ -77,7 +77,7 @@ createPolygon.prototype.intersectPath = function(path, inclusive, t) {
 		}
 	}			
 };
-createPolygon.prototype.intersectPolygon = function(polygon, inclusive, t) {
+createPolygon.prototype.intersectPolygon = function(polygon, inclusive) {
 	var bound=new Polygon(polygon);
 	var vector_points2 = [];
 
@@ -94,6 +94,13 @@ createPolygon.prototype.intersectPolygon = function(polygon, inclusive, t) {
 
 	var p = new Point2D(p_x,p_y);
 	var p2 = new Point2D(this.points[0],this.points[1])
+
+	if (inclusive != true){
+		var result = Intersection.intersectPolygonPolygon(vector_points, this.vector_points2)
+		if (result.status == "Intersection") {
+			return 0;
+		}	
+	}
 	if (this.shapebound2D.pointInPolygon(p)){
 		return 1;
 	}
@@ -105,7 +112,7 @@ createPolygon.prototype.intersectPolygon = function(polygon, inclusive, t) {
 		return 1;
 	}
 };
-createPolygon.prototype.intersectEllipse = function(ellipse, inclusive, t) {
+createPolygon.prototype.intersectEllipse = function(ellipse, inclusive) {
 	var cx=ellipse.getAttributeNS(null,"cx");
 	var cy=ellipse.getAttributeNS(null,"cy");
 	var c = new Point2D(cx,cy);
@@ -116,7 +123,12 @@ createPolygon.prototype.intersectEllipse = function(ellipse, inclusive, t) {
 		var rx = ellipse.getAttributeNS(null,"rx");
 		var ry = ellipse.getAttributeNS(null,"ry");		
 	}
-	
+	if (inclusive != true){
+		var result = Intersection.intersectEllipsePolygon(c, rx, ry, this.vector_points)
+		if (result.status == "Intersection") {
+			return 0;
+		}
+	}
 	if (this.shapebound2D.pointInPolygon(c)){
 		return 1;
 	}
@@ -126,10 +138,10 @@ createPolygon.prototype.intersectEllipse = function(ellipse, inclusive, t) {
 	var result = Intersection.intersectEllipsePolygon(c, rx, ry, this.vector_points)
 	if (result.status == "Intersection") {
 		return 1;
-	}		
+	}	
 	return 0;
 };
-createPolygon.prototype.intersectLine = function(line, inclusive, t) {
+createPolygon.prototype.intersectLine = function(line, inclusive) {
 	if (line.tagName == "polyline"){
 		var points = line.getAttributeNS(null,"points").split(" ")		
 		for (var j=0;j<points.length-1;j++){
@@ -142,9 +154,12 @@ createPolygon.prototype.intersectLine = function(line, inclusive, t) {
 			var p1 = new Point2D(px,py);
 			var p2 = new Point2D(px2,py2);				
 			var result = Intersection.intersectLinePolygon(p1, p2, this.vector_points); //alert(result.status)
-			if (result.status == "Intersection") {
+			if (result.status == "Intersection" && inclusive) {
 				return 1;
 			}
+			if (result.status == "Intersection" && inclusive != true) {
+				return 0;
+			}			
 			if (this.shapebound2D.pointInPolygon(p1) || this.shapebound2D.pointInPolygon(p2)){
 				return 1;
 			}
@@ -157,11 +172,11 @@ createPolygon.prototype.intersectLine = function(line, inclusive, t) {
 		var p1 = new Point2D(x1,y1)
 		var p2 = new Point2D(x2,y2)
 		var result = Intersection.intersectLinePolygon(p1, p2, this.vector_points); //alert(result.status)
-		if (result.status == "Intersection") {
+		if (result.status == "Intersection" && inclusive) {
 			return 1;
-		}	
-		if (result.status == "Intersection") {
-			return 1;
+		}
+		if (result.status == "Intersection" && inclusive != true) {
+			return 0;
 		}
 		if (this.shapebound2D.pointInPolygon(p1) || this.shapebound2D.pointInPolygon(p2)){
 			return 1;
@@ -171,6 +186,7 @@ createPolygon.prototype.intersectLine = function(line, inclusive, t) {
 
 function createEllipse(points){
 	var ellipse = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+
 	var ecx=points[0];
 	var ecy=points[1];
 	var rx=points[2];
@@ -183,9 +199,9 @@ function createEllipse(points){
 
 	this.ellipse = ellipse;
 	this.points = points;
-	this.ellipse2D = new Ellipse(points)
+	this.ellipse2D = new Ellipse(ellipse)
 }
-createEllipse.prototype.intersectPath = function(path, inclusive, t) {
+createEllipse.prototype.intersectPath = function(path, inclusive) {
 	var P = new Path(path);
 	var s=path.getAttributeNS(null,"d")
 
@@ -234,7 +250,7 @@ createEllipse.prototype.intersectPath = function(path, inclusive, t) {
 		return 1;
 	}
 };
-createEllipse.prototype.intersectPolygon = function(polygon, inclusive, t) {
+createEllipse.prototype.intersectPolygon = function(polygon, inclusive) {
 	var vector_points = [];
 	var points = polygon.getAttributeNS(null,"points").split(" ")
 	for (var j=0;j<points.length;j++){
@@ -252,6 +268,12 @@ createEllipse.prototype.intersectPolygon = function(polygon, inclusive, t) {
 	var ry = this.points[3];
 	var bound = new Polygon(polygon)
 
+	if (inclusive != true){
+		var result = Intersection.intersectEllipsePolygon(c, rx, ry, vector_points)
+		if (result.status == "Intersection") {
+			return 0;
+		}			
+	}
 	if (bound.pointInPolygon(c)){
 		return 1;
 	}
@@ -265,7 +287,7 @@ createEllipse.prototype.intersectPolygon = function(polygon, inclusive, t) {
 	}	
 };
 
-createEllipse.prototype.intersectEllipse = function(ellipse, inclusive, t) {
+createEllipse.prototype.intersectEllipse = function(ellipse, inclusive) {
 	var ecx=ellipse.getAttributeNS(null,"cx");
 	var ecy=ellipse.getAttributeNS(null,"cy");
 	if (ellipse.tagName == "circle"){
@@ -282,34 +304,61 @@ createEllipse.prototype.intersectEllipse = function(ellipse, inclusive, t) {
 	var r1=this.points[2];
 	var r2=this.points[3];
 	var c = new Point2D(cx,cy);
+
+	if (inclusive != true){
+		var result = Intersection.intersectEllipseEllipse(c, r1, r2, ec, rx, ry)
+		if (result.status == "Intersection") {
+			return 0;
+		}			
+	}
 	
 	if (Math.pow((cx-ecx)/rx,2) + Math.pow((cy-ecy)/ry,2) <= 1){
 		return 1;
 	}
+	if (Math.pow((cx-ecx)/r1,2) + Math.pow((cy-ecy)/r2,2) <= 1){
+		return 1;
+	}	
 	var result = Intersection.intersectEllipseEllipse(c, r1, r2, ec, rx, ry)
-	if (result.status == "Intersection") {
+	if (result.status == "Intersection" && inclusive) {
 		return 1;
 	}
 };
 
-createEllipse.prototype.intersectLine = function(line, inclusive, t) {
-	var c = new Point2D(this.points[0], this.points[1]);
+createEllipse.prototype.intersectLine = function(line, inclusive) {
+	var cx = this.points[0];
+	var cy = this.points[1];
+	var c = new Point2D(cx, cy);
+	var rx = this.points[2];
+	var ry = this.points[3];
+	
 	if (points.length > 2){
 		for (var j=0;j<points.length-1;j++){
 			var a1 = new Point2D(points[j][0],points[j][1]);
 			var a2 = new Point2D(points[j+1][0],points[j+1][1]);
 			var result = Intersection.intersectEllipseLine(c, this.points[2], this.points[3], a1, a2)
-			if (result.status == "Intersection") {
+			if (result.status == "Intersection" && inclusive) {
 				return 1;
 			}
+			if (result.status == "Intersection" && inclusive != true) {
+				return 0;
+			}	
+			if (Math.pow((cx-points[j][0])/rx, 2) + Math.pow((cy-points[j][1])/ry, 2) <= 1)	{
+				return 1;
+			}	
 		}
 	} else if (points.length == 2){
 		var a1 = new Point2D(points[0][0],points[0][1]);
 		var a2 = new Point2D(points[1][0],points[1][1]);
 		var result = Intersection.intersectEllipseLine(c, this.points[2], this.points[3], a1, a2)
-		if (result.status == "Intersection") {
+		if (result.status == "Intersection" && inclusive) {
 			return 1;
 		}
+		if (result.status == "Intersection" && inclusive != true) {
+			return 0;
+		}	
+		if (Math.pow((cx-points[j][0])/rx, 2) + Math.pow((cy-points[j][1])/ry, 2) <= 1)	{
+			return 1;
+		}			
 	}
 };
 
@@ -324,6 +373,8 @@ function createLine(points){
 		line.setAttributeNS(null,"y1",y1);
 		line.setAttributeNS(null,"x2",x2);
 		line.setAttributeNS(null,"y2",y2);
+		line.setAttributeNS(null,"transform","scale("+(1/Panel.scale)+")" + "translate(" [
+		Panel.x,Panel.y]+")");
 	} else if (points.length > 2){
 		var line = document.createElementNS("http://www.w3.org/2000/svg","polyline");
 		var strpoints=[];
