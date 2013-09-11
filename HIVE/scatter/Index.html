@@ -52,15 +52,53 @@ VisDock.selectionHandler = {
     },
 
     getHitsEllipse: function(points, inclusive) {
-    // This event is called when selections are made using made using Ellipse Tool.
+    var circleObjects = d3.selectAll("circle")[0]; 
+    var nElements = circleObjects.length
+    var hits = []; 
+    var count = 0;
+    var captured = 0; 
 
-        return hits; 
+    // shapebound is a new polygon object for the polygon created by using selection tools.
+    var shapebound = new createEllipse(points); 
+    for (var i = 0; i < nElements; i++) {
+        captured = shapebound.intersectEllipse(circleObjects[i], inclusive); 
+        // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
+                // intersect
+        // Otherwise, it will have 1
+        if (captured == 1) {
+            // we are storing the index of the path object. But the users may
+                  //  choose to store other information or the object itself.
+            hits[count] = i; 
+            count++;
+        }
+    }
+    return hits;
     },
 
     getHitsLine: function(points, inclusive) {
-    // This event is called when selections are made using Polyline, Straightline, and Freeselection tools.
 
-        return hits; 
+    var circleObjects = d3.selectAll("circle")[0]; 
+    var nElements = circleObjects.length
+    var hits = []; 
+    var count = 0;
+    var captured = 0; 
+
+    // shapebound is a new polygon object for the polygon created by using selection tools.
+    var shapebound = new createLine(points); 
+    for (var i = 0; i < nElements; i++) {
+        captured = shapebound.intersectEllipse(circleObjects[i], inclusive); 
+        // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
+                // intersect
+        // Otherwise, it will have 1
+        if (captured == 1) {
+            // we are storing the index of the path object. But the users may
+                  //  choose to store other information or the object itself.
+            hits[count] = i; 
+            count++;
+        }
+    }
+    return hits;
+
     },
 
     setColor: function(hits) {

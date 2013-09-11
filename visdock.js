@@ -182,10 +182,12 @@ var EllipseTool = {
 
 		Panel.panel.on("mouseup", function() {	    	
 	    // Forward the selection
+	    	EllipseTool.start[0] = EllipseTool.start[0] - Panel.x;
+	    	EllipseTool.start[1] = EllipseTool.start[1] - Panel.y;
 	    	var x = d3.mouse(this)[0] - Panel.x;
 	    	var y = d3.mouse(this)[1] - Panel.y;
 	    	var ellip = EllipseTool.getBoundingEllipse([x,y]);
-
+			
 	    	Toolbox.select("Ellipse", ellip, Toolbox.inclusive);
 	    
 	    // Remove the bounding box
@@ -1070,10 +1072,11 @@ var AnnotatedByAreaTool = {
 	    	AnnotatedByAreaTool.segments += 1;
 	    	var points = AnnotatedByAreaTool.getPoints();
 	    	if (AnnotatedByAreaTool.segments == 1) {
-	        	AnnotatedByAreaTool.blasso[N] = Panel.panel.append("polygon")
+	        	AnnotatedByAreaTool.blasso[N] = Panel.viewport.append("polygon")//Panel.panel.append("polygon")
 	            	.attr("id", "selection")
 	            	.attr("points", points)
-	            	.attr("class", "selection");
+	            	.attr("class", "selection")
+	            	.attr("transform","translate("+(-Panel.x)+","+(-Panel.y)+")");
 	    		}
 	    		else {
 	        		AnnotatedByAreaTool.blasso[N].attr("points",points);
@@ -1110,7 +1113,7 @@ var AnnotatedByAreaTool = {
 			AnnotatedByAreaTool.end[0] = AnnotatedByAreaTool.pointStart[0] + 50;
 			AnnotatedByAreaTool.end[1] = AnnotatedByAreaTool.pointStart[1] - 50;
 		
-			var annotation = Panel.annotation.append("g");
+			var annotation = Panel.viewport.append("g");
 			annotationArray[numAnno] = [];
 			annotationArray[numAnno][0] = annotation;
 			annotationArray[numAnno][1] = 1;
@@ -1124,17 +1127,19 @@ var AnnotatedByAreaTool = {
 				.attr("class", "annotation-circle")
 				.attr("r", 2)
 				.attr("fill", "red")
-				.attr("opacity", 0.8);
-			
+				.attr("opacity", 0.8)
+				.attr("transform","translate("+(-Panel.x)+","+(-Panel.y)+")");
 			annotation.append("line")
 				.attr("x1", AnnotatedByAreaTool.pointStart[0])
 				.attr("y1", AnnotatedByAreaTool.pointStart[1])
 				.attr("x2", AnnotatedByAreaTool.end[0])
 				.attr("y2", AnnotatedByAreaTool.end[1])
-				.attr("class", "annotation-line");
-			
-			var label = annotation.append("g").attr("pointer-events", "visiblePainted");;
-	
+				.attr("class", "annotation-line")
+				.attr("transform","translate("+(-Panel.x)+","+(-Panel.y)+")")
+				
+			var label = annotation.append("g").attr("pointer-events", "visiblePainted")
+							.attr("transform","translate("+(-Panel.x)+","+(-Panel.y)+")");
+				
 			var foreignObject = label.append("foreignObject").attr("x",AnnotatedByAreaTool.end[0])
 									.attr("y",AnnotatedByAreaTool.end[1])
 									.attr("width", "120px").attr("height", "45px");
@@ -3404,6 +3409,7 @@ var Panel = {
 			   "scale(" + this.scale + ")" +
 			   "translate(" + this.x + " " + this.y + ") " +
 			   "rotate(" + this.rotation + ")");
+		   
 		var invTransform = Panel.viewport[0][0].getCTM().inverse();
 		BirdView.applyInverse(invTransform);
     },
@@ -3496,11 +3502,12 @@ var VisDock = {
     },
     utils: {
     	getQueryColor: function(index){
-    		alert(QueryManager.colors[index])
     		return QueryManager.colors[index];
     	},
+    	changeQueryColor: function(index, color){
+    		QueryManager.colors[index] = color;
+    	},    	
      	getQueryVisibility: function(index){
-     		alert(QueryManager.visibility[index])
      		return QueryManager.visibility[index];
      	},
     	addPathLayer: function(path){

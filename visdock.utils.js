@@ -452,15 +452,15 @@ createLine.prototype.intersectPolygon = function(polygon, inclusive, t) {
 };
 
 createLine.prototype.intersectEllipse = function(ellipse, inclusive, t) {
-	var cx=circle.getAttributeNS(null,"cx");
-	var cy=circle.getAttributeNS(null,"cy");
+	var cx=ellipse.getAttributeNS(null,"cx");
+	var cy=ellipse.getAttributeNS(null,"cy");
 	var c = new Point2D(cx,cy)	
 	if (ellipse.tagName == "circle"){ // Circle
-		var rx=circle.getAttributeNS(null,"r");		
+		var rx=ellipse.getAttributeNS(null,"r");		
 		var ry=rx;	
 	} else if (ellipse.tagName == "ellipse") { // Ellipse
-		var rx=circle.getAttributeNS(null,"rx");		
-		var ry=circle.getAttributeNS(null,"ry");			
+		var rx=ellipse.getAttributeNS(null,"rx");		
+		var ry=ellipse.getAttributeNS(null,"ry");			
 	}
 	if (this.points.length > 2){
 		for (var j=0;j<points.length-1;j++){

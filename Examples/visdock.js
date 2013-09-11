@@ -182,10 +182,12 @@ var EllipseTool = {
 
 		Panel.panel.on("mouseup", function() {	    	
 	    // Forward the selection
+	    	EllipseTool.start[0] = EllipseTool.start[0] - Panel.x;
+	    	EllipseTool.start[1] = EllipseTool.start[1] - Panel.y;
 	    	var x = d3.mouse(this)[0] - Panel.x;
 	    	var y = d3.mouse(this)[1] - Panel.y;
 	    	var ellip = EllipseTool.getBoundingEllipse([x,y]);
-
+			
 	    	Toolbox.select("Ellipse", ellip, Toolbox.inclusive);
 	    
 	    // Remove the bounding box
@@ -1070,10 +1072,11 @@ var AnnotatedByAreaTool = {
 	    	AnnotatedByAreaTool.segments += 1;
 	    	var points = AnnotatedByAreaTool.getPoints();
 	    	if (AnnotatedByAreaTool.segments == 1) {
-	        	AnnotatedByAreaTool.blasso[N] = Panel.panel.append("polygon")
+	        	AnnotatedByAreaTool.blasso[N] = Panel.viewport.append("polygon")//Panel.panel.append("polygon")
 	            	.attr("id", "selection")
 	            	.attr("points", points)
-	            	.attr("class", "selection");
+	            	.attr("class", "selection")
+	            	.attr("transform","translate("+(-Panel.x)+","+(-Panel.y)+")");
 	    		}
 	    		else {
 	        		AnnotatedByAreaTool.blasso[N].attr("points",points);
@@ -1110,7 +1113,7 @@ var AnnotatedByAreaTool = {
 			AnnotatedByAreaTool.end[0] = AnnotatedByAreaTool.pointStart[0] + 50;
 			AnnotatedByAreaTool.end[1] = AnnotatedByAreaTool.pointStart[1] - 50;
 		
-			var annotation = Panel.annotation.append("g");
+			var annotation = Panel.viewport.append("g");
 			annotationArray[numAnno] = [];
 			annotationArray[numAnno][0] = annotation;
 			annotationArray[numAnno][1] = 1;
@@ -1124,17 +1127,19 @@ var AnnotatedByAreaTool = {
 				.attr("class", "annotation-circle")
 				.attr("r", 2)
 				.attr("fill", "red")
-				.attr("opacity", 0.8);
-			
+				.attr("opacity", 0.8)
+				.attr("transform","translate("+(-Panel.x)+","+(-Panel.y)+")");
 			annotation.append("line")
 				.attr("x1", AnnotatedByAreaTool.pointStart[0])
 				.attr("y1", AnnotatedByAreaTool.pointStart[1])
 				.attr("x2", AnnotatedByAreaTool.end[0])
 				.attr("y2", AnnotatedByAreaTool.end[1])
-				.attr("class", "annotation-line");
-			
-			var label = annotation.append("g").attr("pointer-events", "visiblePainted");;
-	
+				.attr("class", "annotation-line")
+				.attr("transform","translate("+(-Panel.x)+","+(-Panel.y)+")")
+				
+			var label = annotation.append("g").attr("pointer-events", "visiblePainted")
+							.attr("transform","translate("+(-Panel.x)+","+(-Panel.y)+")");
+				
 			var foreignObject = label.append("foreignObject").attr("x",AnnotatedByAreaTool.end[0])
 									.attr("y",AnnotatedByAreaTool.end[1])
 									.attr("width", "120px").attr("height", "45px");
@@ -3337,8 +3342,7 @@ var Panel = {
     hostvis: null,
     width: 0,
     height: 0,
-    T: null,
-    invTransform: null,
+    
     init: function(svg, width, height) {
 
 	// Create the main panel group
@@ -3368,9 +3372,7 @@ var Panel = {
 		.attr("id", "VisDockViewPort");
 		this.hostvis = this.viewport.append("g");
 		this.annotation = this.viewport.append("g");
-
-		this.T = Panel.viewport[0][0].getCTM();
-		this.invTransform = Panel.viewport[0][0].getCTM().inverse();		
+		
 
 	/*
 	// Demonstrates clipping
@@ -3407,9 +3409,9 @@ var Panel = {
 			   "scale(" + this.scale + ")" +
 			   "translate(" + this.x + " " + this.y + ") " +
 			   "rotate(" + this.rotation + ")");
-		this.T = Panel.viewport[0][0].getCTM();
-		this.invTransform = Panel.viewport[0][0].getCTM().inverse();
-		//BirdView.applyInverse(invTransform);
+		   
+		var invTransform = Panel.viewport[0][0].getCTM().inverse();
+		BirdView.applyInverse(invTransform);
     },
 
     reset: function() {
@@ -3468,6 +3470,7 @@ var VisDock = {
 		    initg = document.getElementsByTagName("g");
 		    init_g = initg.length;
 		}
+//alert(init_g)
 
 		QueryManager.init(this.svg, width, height);
 		
@@ -3499,11 +3502,12 @@ var VisDock = {
     },
     utils: {
     	getQueryColor: function(index){
-    		alert(QueryManager.colors[index])
     		return QueryManager.colors[index];
     	},
+    	changeQueryColor: function(index, color){
+    		QueryManager.colors[index] = color;
+    	},    	
      	getQueryVisibility: function(index){
-     		alert(QueryManager.visibility[index])
      		return QueryManager.visibility[index];
      	},
     	addPathLayer: function(path){
@@ -3514,7 +3518,6 @@ var VisDock = {
 			}
 			var d = path.getAttributeNS(null,"d");
 			var P = viewport.append("path")
-					.attr("class", "VisDockPathLayer")
 					.attr("d",d)
 					.attr("fill", VisDock.color[num-1])
 					.attr("opacity", VisDock.opacity)
@@ -3545,7 +3548,6 @@ var VisDock = {
 			}
 
 			var C = viewport.append("ellipse")
-				.attr("class", "VisDockEllipseLayer")
 				.attr("cx", cx)
 				.attr("cy", cy)
 				.attr("rx", rx)
@@ -3566,10 +3568,9 @@ var VisDock = {
 				QueryManager.visibility[num-1] = [];
 			}
 
-			var points = polygon.getAttributeNS(null,"points");
+			var points = polygon.getAttributeNS(null,"polygon");
 
 			var C = viewport.append("polygon")
-				.attr("class", "VisDockPolygonLayer")
 				.attr("points", points)
 				.attr("style", "opacity:" + VisDock.opacity + "; fill:" + VisDock.color[num-1]);
 
@@ -3578,70 +3579,7 @@ var VisDock = {
 				QueryManager.colors[num-1] = VisDock.color[num-1];
 				QueryManager.visibility[num-1] = VisDock.opacity;
 			}	   		
-    	},
-     	addLineLayer: function(line){
- 			if (QueryManager.layers[num-1] == undefined){
-				QueryManager.layers[num-1] = [];
-				QueryManager.colors[num-1] = [];
-				QueryManager.visibility[num-1] = [];
-			}
-			if (line.tagName == "polyline"){
-				var points = line.getAttributeNS(null,"points");	
-				var C = viewport.append("polyline")
-					.attr("class", "VisDockLineLayer")
-					.attr("points", points)
-					.attr("style", "opacity:" + VisDock.opacity + "; fill:" + VisDock.color[num-1]);
-			} else {
-				var x1 = line.getAttributeNS(null,"x1");
-				var y1 = line.getAttributeNS(null,"y1");
-				var x2 = line.getAttributeNS(null,"x2");
-				var y2 = line.getAttributeNS(null,"y2");	
-				var C = viewport.append("line")
-					.attr("class", "VisDockLineLayer")
-					.attr("x1", x1)
-					.attr("y1", y1)
-					.attr("x2", x2)
-					.attr("y2", y2)
-					.attr("style", "opacity:" + VisDock.opacity + "; fill:" + VisDock.color[num-1]);				
-			}
-
-			QueryManager.layers[num-1].push(C);
-			if (QueryManager.colors[num-1].length == 0){
-				QueryManager.colors[num-1] = VisDock.color[num-1];
-				QueryManager.visibility[num-1] = VisDock.opacity;
-			}	   		
-    	},
-     	addTextLayer: function(line){
- 			if (QueryManager.layers[num-1] == undefined){
-				QueryManager.layers[num-1] = [];
-				QueryManager.colors[num-1] = [];
-				QueryManager.visibility[num-1] = [];
-			}
-			if (line.tagName == "polyline"){
-				var points = line.getAttributeNS(null,"points");	
-				var C = viewport.append("polyline")
-					.attr("class", "VisDockLineLayer")
-					.attr("points", points)
-					.attr("style", "opacity:" + VisDock.opacity + "; fill:" + VisDock.color[num-1]);
-			} else {
-				var x1 = line.getAttributeNS(null,"x1");
-				var y1 = line.getAttributeNS(null,"y1");
-				var x2 = line.getAttributeNS(null,"x2");
-				var y2 = line.getAttributeNS(null,"y2");	
-				var C = viewport.append("line")
-					.attr("class", "VisDockLineLayer")
-					.attr("x1", x1)
-					.attr("y1", y1)
-					.attr("x2", x2)
-					.attr("y2", y2)
-					.attr("style", "opacity:" + VisDock.opacity + "; fill:" + VisDock.color[num-1]);				
-			}
-
-			QueryManager.layers[num-1].push(C);
-			if (QueryManager.colors[num-1].length == 0){
-				QueryManager.colors[num-1] = VisDock.color[num-1];
-				QueryManager.visibility[num-1] = VisDock.opacity;
-			}	   		
-    	}        	  	
-    }         
+    	}
+    }     
+    
 };
