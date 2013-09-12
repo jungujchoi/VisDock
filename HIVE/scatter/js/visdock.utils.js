@@ -68,7 +68,7 @@ createPolygon.prototype.intersectPath = function(path, inclusive) {
 		}
 	}
 	if (inclusive == true){
-		var result = Intersection.intersectPathShape(P, bound);
+		var result = Intersection.intersectPathShape(P, this.shapebound2D);
 		if (result.status == "Intersection") {
 			return 1;
 		}
