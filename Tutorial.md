@@ -238,9 +238,9 @@ binary operations between queries (common, union, or XOR).
 <br>
 <pre><code>
 setColor: function(hits) {
-            var pathObjects = d3.selectAll("path")[0]; 
-            for (var i = 0; i &lt; hits.length; i++) {
-                VisDock.utils.addPathLayer(pathObjects[hits[i]]);
+            var CircleElements = d3.selectAll(".leaf")[0];
+            for (var i = 0; i < hits.length; i++) {
+                VisDock.utils.addEllipseLayer(CircleElements[hits[i]].childNodes[1]);
             }
 },
 </code></pre>
@@ -248,9 +248,10 @@ setColor: function(hits) {
  + changeColor: this function will be called when the users wish to change the color of a query or queries.
 <br>
 <pre><code>
-changeColor: function(color, query) {
-            for (var i=0; i &lt; query.length; i++) {
-                query[i].attr("fill", color)
+changeColor: function(color, query, index) {
+            var visibility = VisDock.utils.getQueryVisibility(index);   
+            for (var i = 0; i < query.length; i++) {
+                query[i].attr("style", "opacity: " + visibility + "; fill: " + color)
             }
 },
 </code></pre>
@@ -258,9 +259,10 @@ changeColor: function(color, query) {
  + changeVisibility: this function will be called when the users wish to change the visibility of
 Freeselection tools.
 <pre><code>
-changeVisibility: function(vis, query) {
-            for (var i = 0; i &lt; query.length; i++) {
-                query[i].attr("opacity", vis);
+changeVisibility: function(vis, query, index) {
+            var color = VisDock.utils.getQueryColor(index);
+            for (var i = 0; i < query.length; i++) {
+                query[i].attr("style", "opacity: " + vis + "; fill: " + color)
             }
 },
 </code></pre>
@@ -268,7 +270,7 @@ changeVisibility: function(vis, query) {
  + removeColor: this function will be called when the users wish to remove the layers for a query or queries.
 <pre><code>
 removeColor: function(hits, index) {
-            for (var i = 0; i &lt; hits.length; i++) {
+            for (var i = 0; i < hits.length; i++) {
                 hits[i].remove();
             }
     },
