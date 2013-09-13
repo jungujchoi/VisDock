@@ -147,6 +147,21 @@ can utilize. The tiger picture example consists of only SVG path elements. There
 between SVG path elements and shapes needs to be made. We will provide an example.
  + getHitsPolygon: this event will be called when the users make selections with Lasso, Polygon and
 Rectangle tools.
+<ul>
+  <li> Search for a specific type of objects: if the users want to make selections for specific type of
+SVG objects, like SVG path elements in an SVG file, or leaf nodes in a tree map, the users need to 
+look up and store these objects in an array and check the intersection with the user-drawn polygon. 
+<pre><code>// Search for SVG path elements without using d3 library
+var pathObjects = documents.getElementsByTagName("path")[0];
+// with d3 library
+var pathObjects = d3.selectAll("path")[0];
+<br>// Search for leaf nodes without using d3 library
+var leafOjbects = documents.getElementsByClassName(".leaf")[0];
+// with d3 library
+var leafOjbects = d3.selectAll(".leaf")[0]; 
+</code></pre>
+  <li> Check the intersection:
+</ul>
 <br>
 <pre><code>
 getHitsPolygon: function(points, inclusive) {
