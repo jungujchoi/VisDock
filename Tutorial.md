@@ -163,17 +163,17 @@ var leafOjbects = d3.selectAll(".leaf")[0];
 <br>
   <li> Create a new shape class: the user-drawn polygons needs to be formally declared as a shape class
 defined in visdock.util.js. This is a necessary step for any getHits functions.
-<pre><code>// var shapebound = new createPolygon(points);
+<pre><code>var shapebound = new createPolygon(points);
 </code></pre>
 <br>
   <li> Check the intersection: each object needs to be compared with 'shapebound' for intersection. For
 convenience, we'll use a for loop to check every object in the array. The shape class declared in the
 earlier step has sub-class functions that do these comparisons. For detailed documentation on the
 sub-classes can be found on the main page. 
-<pre><code> for (var i = 0; i &lt; leafObjects.length; i++) {
-        if (shapebound.intersectPath(leafObjects[i], inclusive) {
-            hits.push(i)
-        }
+<pre><code>for (var i = 0; i &lt; leafObjects.length; i++) {
+            if (shapebound.intersectPath(leafObjects[i], inclusive) {
+                hits.push(i)
+            }
 }
 </ul>
 <br>
