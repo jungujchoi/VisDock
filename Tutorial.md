@@ -239,7 +239,7 @@ binary operations between queries (common, union, or XOR).
 <pre><code>
 setColor: function(hits) {
             var CircleElements = d3.selectAll(".leaf")[0];
-            for (var i = 0; i < hits.length; i++) {
+            for (var i = 0; i &lt; hits.length; i++) {
                 VisDock.utils.addEllipseLayer(CircleElements[hits[i]].childNodes[1]);
             }
 },
@@ -250,7 +250,7 @@ setColor: function(hits) {
 <pre><code>
 changeColor: function(color, query, index) {
             var visibility = VisDock.utils.getQueryVisibility(index);   
-            for (var i = 0; i < query.length; i++) {
+            for (var i = 0; i &lt; query.length; i++) {
                 query[i].attr("style", "opacity: " + visibility + "; fill: " + color)
             }
 },
@@ -261,7 +261,7 @@ Freeselection tools.
 <pre><code>
 changeVisibility: function(vis, query, index) {
             var color = VisDock.utils.getQueryColor(index);
-            for (var i = 0; i < query.length; i++) {
+            for (var i = 0; i &lt; query.length; i++) {
                 query[i].attr("style", "opacity: " + vis + "; fill: " + color)
             }
 },
@@ -270,7 +270,7 @@ changeVisibility: function(vis, query, index) {
  + removeColor: this function will be called when the users wish to remove the layers for a query or queries.
 <pre><code>
 removeColor: function(hits, index) {
-            for (var i = 0; i < hits.length; i++) {
+            for (var i = 0; i &lt; hits.length; i++) {
                 hits[i].remove();
             }
     },
