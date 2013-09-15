@@ -9,7 +9,7 @@ from <a href="http://www.kevlindev.com">www.kevindev.com</a> as well.
 <code style="margin-left: 30px">&lt;script type="text/javascript" src="visdock.js"&gt;&lt;/script&gt;</code><br>
 <code style="margin-left: 30px">&lt;script type="text/javascript" src="http://www.kevlindev.com/gui/2D.js" &gt;&lt;/script&gt;</code><br>
 <code style="margin-left: 30px">&lt;script type="text/javascript" src="http://www.kevlindev.com/geometry/2D/intersections/IntersectionUtilities.js" &gt;&lt;/script&gt;</code><br>
-<code style="margin-left: 30px">&lt;script type="text/javascript" src="UtilitiesLibrary.js"&gt;&lt;/script&gt;</code>
+<code style="margin-left: 30px">&lt;script type="text/javascript" src="visdock.utils.js"&gt;&lt;/script&gt;</code>
 </pre>
 <br>
 - Initialize VisDock: this initialization step physically attaches the VisDock onto your visualization. 
@@ -147,6 +147,35 @@ can utilize. The tiger picture example consists of only SVG path elements. There
 between SVG path elements and shapes needs to be made. We will provide an example.
  + getHitsPolygon: this event will be called when the users make selections with Lasso, Polygon and
 Rectangle tools.
+<ul>
+  <li> Search for a specific type of objects: if the users want to make selections for specific type of
+SVG objects, like SVG path elements in an SVG file, or leaf nodes in a tree map, the users need to 
+look up and store these objects in an array and check the intersection with the user-drawn polygon. 
+<pre><code>// Search for SVG path elements without using d3 library
+var pathObjects = documents.getElementsByTagName("path")[0];
+// with d3 library
+var pathObjects = d3.selectAll("path")[0];
+<br>// Search for leaf nodes without using d3 library
+var leafOjbects = documents.getElementsByClassName(".leaf")[0];
+// with d3 library
+var leafOjbects = d3.selectAll(".leaf")[0]; 
+</code></pre>
+<br>
+  <li> Create a new shape class: the user-drawn polygons needs to be formally declared as a shape class
+defined in visdock.util.js. This is a necessary step for any getHits functions.
+<pre><code>var shapebound = new createPolygon(points);
+</code></pre>
+<br>
+  <li> Check the intersection: each object needs to be compared with 'shapebound' for intersection. For
+convenience, we'll use a for loop to check every object in the array. The shape class declared in the
+earlier step has sub-class functions that do these comparisons. For detailed documentation on the
+sub-classes can be found on the main page. 
+<pre><code>for (var i = 0; i &lt; leafObjects.length; i++) {
+            if (shapebound.intersectPath(leafObjects[i], inclusive) {
+                hits.push(i)
+            }
+}
+</ul>
 <br>
 <pre><code>
 getHitsPolygon: function(points, inclusive) {
@@ -161,11 +190,11 @@ getHitsPolygon: function(points, inclusive) {
             for (var i = 0; i &lt; nElements; i++) {
                 captured = shapebound.intersectPath(pathObjects[i], inclusive); 
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
-                         intersect
+                        // intersect
                 // Otherwise, it will have 1
                 if (captured == 1) {
                     // we are storing the index of the path object. But the users may
-                            choose to store other information or the object itself.
+                           // choose to store other information or the object itself.
                     hits[count] = i; 
                     count++;
                 }
@@ -189,11 +218,11 @@ getHitsEllipse: function(points, inclusive) {
             for (var i = 0; i &lt; nElements; i++) {
                 captured = shapebound.intersectPath(pathObjects[i], inclusive);
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
-                         intersect
+                        // intersect
                 // Otherwise, it will have 1
                 if (captured == 1) {
                     // we are storing the index of the path object. But the users may
-                            choose to store other information or the object itself.
+                           // choose to store other information or the object itself.
                     hits[count] = i; 
                     count++;
                 }
@@ -214,16 +243,16 @@ getHitsLine: function(points, inclusive) {
             var captured = 0; 
 
             // shapebound is a new line object for the line created by using StraightLine, Polyline, and
-                   Freeselection tools.
+                  // Freeselection tools.
             var shapebound = new createLine(points); 
             for (var i = 0; i &lt; nElements; i++) {
                 captured = shapebound.intersectPath(pathObjects[i], inclusive);
                 // captured will have 0 if the path element 'pathOjbect[i]' and the shapebound do not
-                         intersect
+                        // intersect
                 // Otherwise, it will have 1
                 if (captured == 1) {
                     // we are storing the index of the path object. But the users may
-                            choose to store other information or the object itself.
+                           // choose to store other information or the object itself.
                     hits[count] = i; 
                     count++;
                 }
@@ -238,9 +267,9 @@ binary operations between queries (common, union, or XOR).
 <br>
 <pre><code>
 setColor: function(hits) {
-            var pathObjects = d3.selectAll("path")[0]; 
+            var CircleElements = d3.selectAll(".leaf")[0];
             for (var i = 0; i &lt; hits.length; i++) {
-                VisDock.utils.addPathLayer(pathObjects[hits[i]]);
+                VisDock.utils.addEllipseLayer(CircleElements[hits[i]].childNodes[1]);
             }
 },
 </code></pre>
@@ -248,9 +277,10 @@ setColor: function(hits) {
  + changeColor: this function will be called when the users wish to change the color of a query or queries.
 <br>
 <pre><code>
-changeColor: function(color, query) {
-            for (var i=0; i &lt; query.length; i++) {
-                query[i].attr("fill", color)
+changeColor: function(color, query, index) {
+            var visibility = VisDock.utils.getQueryVisibility(index);   
+            for (var i = 0; i &lt; query.length; i++) {
+                query[i].attr("style", "opacity: " + visibility + "; fill: " + color)
             }
 },
 </code></pre>
@@ -258,9 +288,10 @@ changeColor: function(color, query) {
  + changeVisibility: this function will be called when the users wish to change the visibility of
 Freeselection tools.
 <pre><code>
-changeVisibility: function(vis, query) {
+changeVisibility: function(vis, query, index) {
+            var color = VisDock.utils.getQueryColor(index);
             for (var i = 0; i &lt; query.length; i++) {
-                query[i].attr("opacity", vis);
+                query[i].attr("style", "opacity: " + vis + "; fill: " + color)
             }
 },
 </code></pre>
