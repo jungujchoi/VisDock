@@ -3,6 +3,8 @@ VisDock
 
 VisDock Libraries
 ----------------------------------------------------------------------------------------------------
+Thie page is outdated. For new information and the recent version of VisDock, please visit <a href="https://github.com/VisDockHub/NewVisDock">New VisDock Hub</a>.
+
 VisDock is an interactive web-visualization framework written in JavaScript. VisDock allows visualization
 creators to import various VisDock tools into their host visuailzations for exploration and annotation
 purposes.
@@ -136,5 +138,5 @@ are governed by Query Manager. Its 'class' attribute would be "VisDockLineLayer.
 elemtnt passed as argument. Its 'style' attribute and text would be the same but its color and visibility
 attributes are governed by Query Manager. Its 'class' attribute would be "VisDockTextLayer."
 
-<a href="https://github.com/jungujchoi/VisDock/blob/master/Tutorial.md">Go to VisDock Tutorials</a>
+<a href="https://github.com/VisDockHub/NewVisDock/blob/master/Tutorial.md">Go to VisDock Tutorials</a>
 ------------------------------------------------------------------------------------------------------
