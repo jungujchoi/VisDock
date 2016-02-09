@@ -156,3 +156,4 @@ the annotation reference to the new reference (i.e. new location of the SVG elem
 VisDock
 =======
 New address
+<a href="https://github.com/VisDockHub/NewVisDock">Go to VisDock Examples</a>
